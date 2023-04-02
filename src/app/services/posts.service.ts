@@ -16,7 +16,9 @@ export class PostsService {
 
   fetchPosts() {
     this.http
-      .get<{ success: boolean; posts: Post[]; errors: [] }>('/posts')
+      .get<{ success: boolean; posts: Post[]; errors: [] }>(
+        'https://radiant-crag-39178.herokuapp.com/posts'
+      )
       .subscribe({
         next: (response) => {
           this._posts = response.posts;
