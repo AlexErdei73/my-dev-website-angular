@@ -10,4 +10,6 @@ export interface Post {
   comments: Comment[] | string[];
   likes: string[];
   published: boolean;
+  createdAt: string | undefined;
+  updatedAt: string | undefined;
 }

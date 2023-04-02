@@ -1,5 +1,5 @@
 <div class="posts-view">
-  <app-card [card]="postCard" *ngFor="let post of posts$|async">
+  <app-card [card]="getPostCard(post)" *ngFor="let post of posts$|async">
     <div class="card-body__body">
       <div class="card-body__title">
         <h2>{{post.title}}</h2>
