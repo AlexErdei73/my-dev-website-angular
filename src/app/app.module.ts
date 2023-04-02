@@ -9,11 +9,23 @@ import { AboutComponent } from './components/about/about.component';
 import { PostComponent } from './components/post/post.component';
 import { LoginComponent } from './components/login/login.component';
 import { SignupComponent } from './components/signup/signup.component';
+import { PostsService } from './services/posts.service';
+import { HttpClientModule } from '@angular/common/http';
+import { PostsComponent } from './components/posts/posts.component';
 
 @NgModule({
-  declarations: [AppComponent, NavComponent, HomeComponent, AboutComponent, PostComponent, LoginComponent, SignupComponent],
-  imports: [BrowserModule, AppRoutingModule],
-  providers: [],
+  declarations: [
+    AppComponent,
+    NavComponent,
+    HomeComponent,
+    AboutComponent,
+    PostComponent,
+    LoginComponent,
+    SignupComponent,
+    PostsComponent,
+  ],
+  imports: [BrowserModule, AppRoutingModule, HttpClientModule],
+  providers: [PostsService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}
