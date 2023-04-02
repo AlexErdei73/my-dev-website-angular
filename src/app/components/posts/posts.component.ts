@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
+import { Post } from 'src/app/model/post';
 import { PostsService } from 'src/app/services/posts.service';
 import { Card, Variant } from '../card/card';
 
@@ -15,10 +17,10 @@ export class PostsComponent implements OnInit {
     footerTextLeft: 'Created',
     footerTextRight: 'Edited',
   };
+  posts$!: Observable<Post[]>;
   constructor(private postsService: PostsService) {}
 
   ngOnInit(): void {
-    this.postsService.fetchPosts();
-    console.log(this.postsService.posts);
+    this.posts$ = this.postsService.posts;
   }
 }

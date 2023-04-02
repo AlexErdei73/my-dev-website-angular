@@ -1,32 +1,24 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Post } from '../model/post';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class PostsService {
-  private _posts: Post[] = [];
-  private errors: { msg: string }[] = [];
-  private success = false;
+  private _posts!: Observable<Post[]>;
 
   constructor(private http: HttpClient) {
     this.fetchPosts();
   }
 
   fetchPosts() {
-    this.http
+    this._posts = this.http
       .get<{ success: boolean; posts: Post[]; errors: [] }>(
         'https://radiant-crag-39178.herokuapp.com/posts'
       )
-      .subscribe({
-        next: (response) => {
-          this._posts = response.posts;
-          this.success = response.success;
-          this.errors = response.errors;
-        },
-        error: (err) => (this.errors = [{ msg: err.message }]),
-      });
+      .pipe(map((res) => res.posts));
   }
 
   get posts(): any {
