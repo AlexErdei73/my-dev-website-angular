@@ -12,6 +12,7 @@ import { SignupComponent } from './components/signup/signup.component';
 import { PostsService } from './services/posts.service';
 import { HttpClientModule } from '@angular/common/http';
 import { PostsComponent } from './components/posts/posts.component';
+import { CardComponent } from './components/card/card.component';
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { PostsComponent } from './components/posts/posts.component';
     LoginComponent,
     SignupComponent,
     PostsComponent,
+    CardComponent,
   ],
   imports: [BrowserModule, AppRoutingModule, HttpClientModule],
   providers: [PostsService],
