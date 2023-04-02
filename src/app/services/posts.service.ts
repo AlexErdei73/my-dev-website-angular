@@ -8,6 +8,7 @@ import { map, Observable } from 'rxjs';
 })
 export class PostsService {
   private _posts!: Observable<Post[]>;
+  private _currentPost: Post | undefined;
 
   constructor(private http: HttpClient) {
     this.fetchPosts();
@@ -23,5 +24,13 @@ export class PostsService {
 
   get posts(): any {
     return this._posts;
+  }
+
+  set currentPost(post: Post | undefined) {
+    this._currentPost = post;
+  }
+
+  get currentPost(): Post | undefined {
+    return this._currentPost;
   }
 }

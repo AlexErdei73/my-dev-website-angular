@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { Post } from 'src/app/model/post';
 import { User } from 'src/app/model/user';
@@ -12,7 +13,7 @@ import { Card, Variant } from '../card/card';
 })
 export class PostsComponent implements OnInit {
   posts$!: Observable<Post[]>;
-  constructor(private postsService: PostsService) {}
+  constructor(private postsService: PostsService, private router: Router) {}
 
   ngOnInit(): void {
     this.posts$ = this.postsService.posts;
@@ -30,5 +31,10 @@ export class PostsComponent implements OnInit {
         post.updatedAt && post.updatedAt.slice(0, 10)
       }`,
     };
+  }
+
+  onCickView(post: Post) {
+    this.postsService.currentPost = post;
+    this.router.navigateByUrl('/post');
   }
 }
