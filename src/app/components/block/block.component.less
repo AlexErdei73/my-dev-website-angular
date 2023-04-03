@@ -1,0 +1,49 @@
+@import "../../app.component.less";
+
+@btn-width: 63px;
+@code-block-max-width: 900px;
+
+.block {
+  max-width: @post-width;
+  margin: @gap 0 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: @gap;
+  p,
+  h2 {
+    margin: 0;
+    flex-shrink: 1;
+  }
+  &__subtitle {
+    font-size: x-large;
+  }
+  &__button {
+    .button-sm(@btn-width);
+  }
+  &__button:hover {
+    .button-hover();
+  }
+  &__edit-btns {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row-reverse;
+    justify-content: flex-start;
+    flex-grow: 1;
+    gap: @gap;
+  }
+  &__button--delete {
+    .button-delete();
+  }
+  &__button--delete:hover {
+    .button-delete-hover();
+  }
+  &__code {
+    min-width: calc(100% - (@btn-width + @gap));
+    flex-shrink: 1;
+    flex-grow: 1;
+    padding: 0 @gap;
+    background-color: #282c34;
+    overflow-x: auto;
+  }
+}

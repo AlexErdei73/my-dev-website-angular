@@ -13,6 +13,8 @@ import { PostsService } from './services/posts.service';
 import { HttpClientModule } from '@angular/common/http';
 import { PostsComponent } from './components/posts/posts.component';
 import { CardComponent } from './components/card/card.component';
+import { HighlightJsModule } from 'ngx-highlight-js';
+import { BlockComponent } from './components/block/block.component';
 
 @NgModule({
   declarations: [
@@ -25,8 +27,14 @@ import { CardComponent } from './components/card/card.component';
     SignupComponent,
     PostsComponent,
     CardComponent,
+    BlockComponent,
   ],
-  imports: [BrowserModule, AppRoutingModule, HttpClientModule],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    HttpClientModule,
+    HighlightJsModule,
+  ],
   providers: [PostsService],
   bootstrap: [AppComponent],
 })

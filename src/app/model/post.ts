@@ -6,7 +6,7 @@ export interface Post {
   _id: string;
   title: string;
   author: User | string;
-  content: Block[] | string[];
+  content: Block[];
   comments: Comment[] | string[];
   likes: string[];
   published: boolean;
