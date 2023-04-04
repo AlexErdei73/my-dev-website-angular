@@ -1,9 +1,9 @@
 export interface User {
   _id: string;
-  username: String;
-  hash: String | undefined;
-  isAdmin: Boolean | undefined;
-  name: String | undefined;
-  jobTitle: String | undefined;
-  bio: String | undefined;
+  username: string;
+  hash: string | undefined;
+  isAdmin: boolean | undefined;
+  name: string | undefined;
+  jobTitle: string | undefined;
+  bio: string | undefined;
 }

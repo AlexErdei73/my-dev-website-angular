@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,6 +16,7 @@ import { PostsComponent } from './components/posts/posts.component';
 import { CardComponent } from './components/card/card.component';
 import { HighlightJsModule } from 'ngx-highlight-js';
 import { BlockComponent } from './components/block/block.component';
+import { ErrorMsgComponent } from './components/error-msg/error-msg.component';
 
 @NgModule({
   declarations: [
@@ -28,12 +30,14 @@ import { BlockComponent } from './components/block/block.component';
     PostsComponent,
     CardComponent,
     BlockComponent,
+    ErrorMsgComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     HighlightJsModule,
+    FormsModule,
   ],
   providers: [PostsService],
   bootstrap: [AppComponent],

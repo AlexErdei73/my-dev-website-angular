@@ -1,3 +1,14 @@
-<div class="login">
-  <h1 class="login__title">Login</h1>
+<div class="form-group">
+  <form *ngIf="!loginState.success" class="login" (ngSubmit)="onSubmit(loginForm)" #loginForm="ngForm">
+    <h1 className="login__title">Login</h1>
+
+    <label htmlFor="username">Username*</label>
+    <input type="text" id="username" class="login__username" [(ngModel)]="login.name" required #username="ngModel" name="name" />
+    <label htmlFor="password">Password*</label>
+    <input type="text" id="password" class="login__password" [(ngModel)]="login.password" required #password="ngModel" name="password" />
+    <button type="submit" className="login__button">
+      Login
+    </button>
+    <app-error-msg *ngIf="loginState.msg" [msg]="loginState.msg"></app-error-msg>
+  </form>
 </div>
