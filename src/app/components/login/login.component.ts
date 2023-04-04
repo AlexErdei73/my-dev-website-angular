@@ -26,14 +26,21 @@ export class LoginComponent {
 
   onSubmit(loginForm: { valid: any }) {
     let msg;
-    console.log(loginForm);
     if (!loginForm.valid) {
       msg = 'Please fill in all fields!';
       this.setLoginMsg(msg);
     }
     if (loginForm.valid) {
-      msg = `name: ${this.login.name} password: ${this.login.password}`;
       this.setLoginMsg('');
+      this.loginState.user.username = this.login.name;
+      this.loginState.password = this.login.password;
+      this._loginState.state = this.loginState;
+      this._loginState.login();
+      setTimeout(() => {
+        this.loginState = this._loginState.state;
+        console.log(this.loginState);
+      }, 0);
+      msg = this.loginState.msg;
     }
     window.alert(msg);
   }
