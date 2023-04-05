@@ -54,14 +54,21 @@ export class LoginService {
       )
       .subscribe({
         next: (res) => {
-          if (res.success) {
-            this.loginState = res as Login;
-          }
+          if (res.success) this.loginState = res as Login;
+        },
+        error: (err) => {
+          this.loginState.msg = err.error.msg ? err.error.msg : err.message;
         },
       });
   }
 
   resetPassword() {
     this.loginState.password = '';
+  }
+
+  logout() {
+    this.loginState.token = '';
+    this.loginState.success = false;
+    this.resetPassword();
   }
 }

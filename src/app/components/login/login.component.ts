@@ -43,6 +43,7 @@ export class LoginComponent implements OnInit {
       this._loginState.state.user.username = this.login.name;
       this._loginState.state.password = this.login.password;
       this._loginState.login();
+      //setTimeout(() => console.log(this._loginState.state), 0);
     }
   }
 
@@ -54,6 +55,7 @@ export class LoginComponent implements OnInit {
   }
 
   logout() {
-    console.log('Logout!');
+    this._loginState.logout();
+    this.login.password = '';
   }
 }
