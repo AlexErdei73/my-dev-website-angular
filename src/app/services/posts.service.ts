@@ -12,6 +12,7 @@ export class PostsService {
 
   constructor(private http: HttpClient) {
     this.fetchPosts();
+    this._posts.subscribe((posts) => (this._currentPost = posts[0]));
   }
 
   fetchPosts() {

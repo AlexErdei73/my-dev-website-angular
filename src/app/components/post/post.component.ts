@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Post } from 'src/app/model/post';
 import { PostsService } from 'src/app/services/posts.service';
 
@@ -8,9 +8,9 @@ import { PostsService } from 'src/app/services/posts.service';
   styleUrls: ['./post.component.less'],
 })
 export class PostComponent implements OnInit {
-  post: Post | undefined;
+  @Input() post: Post | undefined;
   constructor(private postsService: PostsService) {}
   ngOnInit(): void {
-    this.post = this.postsService.currentPost;
+    if (!this.post) this.post = this.postsService.currentPost;
   }
 }

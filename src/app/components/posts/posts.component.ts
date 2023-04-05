@@ -30,7 +30,7 @@ export class PostsComponent implements OnInit {
     };
   }
 
-  onCickView(post: Post) {
+  onClickView(post: Post) {
     this.postsService.currentPost = post;
     this.router.navigateByUrl('/post');
   }

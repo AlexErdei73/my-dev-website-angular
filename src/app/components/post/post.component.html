@@ -1,5 +1,5 @@
 <div class="post">
-  <h1 class="post__title">{{post ? post.title : "Post Undefined"}}</h1>
+  <h1 class="post__title">{{post ? post.title : "Post"}}</h1>
   <div *ngIf="post">
     <app-block [block]="block" *ngFor="let block of post.content"></app-block>
   </div>
