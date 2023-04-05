@@ -1,7 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Post } from 'src/app/model/post';
+import { User } from 'src/app/model/user';
 import { LoginService } from 'src/app/services/login.service';
+import { PostsService } from 'src/app/services/posts.service';
 
-interface User {
+interface Login {
   name: string;
   password: string;
 }
@@ -11,17 +14,22 @@ interface User {
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.less'],
 })
-export class LoginComponent {
-  loginState = this._loginState.state;
-  login: User = {
-    name: this.loginState.user.username,
-    password: this.loginState.password,
+export class LoginComponent implements OnInit {
+  login: Login = {
+    name: this._loginState.state.user.username,
+    password: this._loginState.state.password,
   };
-  constructor(private _loginState: LoginService) {}
+  posts: Post[] = [];
+  constructor(
+    public _loginState: LoginService,
+    private postsService: PostsService
+  ) {}
+  ngOnInit(): void {
+    this.postsService.posts.subscribe((posts) => (this.posts = posts));
+  }
 
   private setLoginMsg(msg: string) {
-    this.loginState.msg = msg;
-    this._loginState.state = this.loginState;
+    this._loginState.state.msg = msg;
   }
 
   onSubmit(loginForm: { valid: any }) {
@@ -32,16 +40,20 @@ export class LoginComponent {
     }
     if (loginForm.valid) {
       this.setLoginMsg('');
-      this.loginState.user.username = this.login.name;
-      this.loginState.password = this.login.password;
-      this._loginState.state = this.loginState;
+      this._loginState.state.user.username = this.login.name;
+      this._loginState.state.password = this.login.password;
       this._loginState.login();
-      setTimeout(() => {
-        this.loginState = this._loginState.state;
-        console.log(this.loginState);
-      }, 0);
-      msg = this.loginState.msg;
     }
-    window.alert(msg);
+  }
+
+  userPosts() {
+    return this.posts.filter(
+      (post) =>
+        (post.author as any as User)._id === this._loginState.state.user._id
+    );
+  }
+
+  logout() {
+    console.log('Logout!');
   }
 }

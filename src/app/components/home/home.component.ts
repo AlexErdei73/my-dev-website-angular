@@ -8,7 +8,7 @@ import { PostsService } from 'src/app/services/posts.service';
   styleUrls: ['./home.component.less'],
 })
 export class HomeComponent implements OnInit {
-  posts!: Post[];
+  posts: Post[] = [];
   constructor(private postService: PostsService) {}
   ngOnInit(): void {
     this.postService.posts.subscribe((posts) => (this.posts = posts));

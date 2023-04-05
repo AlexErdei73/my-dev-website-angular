@@ -5,6 +5,25 @@
   .form();
 }
 
+.logout {
+  .login();
+  width: calc(100% - (@navigation-width + 2 * @gap));
+  button {
+    .button(120px);
+  }
+  &__button--link {
+    .button(120px);
+    margin-top: @gap;
+    text-align: center;
+    text-decoration: none;
+    box-sizing: border-box;
+    font-size: small;
+  }
+  &__button--link:hover {
+    .button-hover();
+  }
+}
+
 @media screen and (max-height: @page-height-turning-point) {
   .nav-horizontal();
 }
