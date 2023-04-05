@@ -22,7 +22,7 @@ export class PostsService {
       .pipe(map((res) => res.posts));
   }
 
-  get posts(): any {
+  get posts(): Observable<Post[]> {
     return this._posts;
   }
 

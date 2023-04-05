@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
 import { Post } from 'src/app/model/post';
 import { User } from 'src/app/model/user';
 import { PostsService } from 'src/app/services/posts.service';
-import { Card, Variant } from '../card/card';
+import { Variant } from '../card/card';
 
 @Component({
   selector: 'app-posts',
@@ -12,12 +11,10 @@ import { Card, Variant } from '../card/card';
   styleUrls: ['./posts.component.less'],
 })
 export class PostsComponent implements OnInit {
-  posts$!: Observable<Post[]>;
+  @Input() posts!: Post[];
   constructor(private postsService: PostsService, private router: Router) {}
 
-  ngOnInit(): void {
-    this.posts$ = this.postsService.posts;
-  }
+  ngOnInit(): void {}
 
   getPostCard(post: Post) {
     return {
