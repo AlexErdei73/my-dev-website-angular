@@ -57,5 +57,6 @@ export class LoginComponent implements OnInit {
   logout() {
     this._loginState.logout();
     this.login.password = '';
+    this.login.name = '';
   }
 }

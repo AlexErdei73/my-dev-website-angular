@@ -31,6 +31,11 @@ export class LoginService {
       token: '',
       msg: '',
     };
+    //get loginState from localStorage
+    const initialLoginState: Login = JSON.parse(
+      localStorage.getItem('loginState') as string
+    );
+    if (initialLoginState) this.loginState = initialLoginState;
   }
 
   get state(): Login {
@@ -54,7 +59,13 @@ export class LoginService {
       )
       .subscribe({
         next: (res) => {
-          if (res.success) this.loginState = res as Login;
+          if (res.success) {
+            this.loginState = res as Login;
+            //user logged in successfully
+            this.resetPassword(); //Do not store password as it is sensitive information!!!
+            //Store newLoginState, which contains the token, in localStorage
+            localStorage.setItem('loginState', JSON.stringify(this.loginState));
+          }
         },
         error: (err) => {
           this.loginState.msg = err.error.msg ? err.error.msg : err.message;
@@ -68,7 +79,9 @@ export class LoginService {
 
   logout() {
     this.loginState.token = '';
+    this.loginState.user.username = '';
     this.loginState.success = false;
     this.resetPassword();
+    localStorage.removeItem('loginState');
   }
 }
