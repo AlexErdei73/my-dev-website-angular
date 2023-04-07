@@ -13,6 +13,9 @@
         <button *ngIf="!edit && user && user._id" class="card-body__button" (click)="onClickLike(post)">
           {{isPostLiked(post) ? "Unlike" : "Like"}}
         </button>
+        <button *ngIf="edit" class="card-body__button--delete" (click)="onClickDelete(post)">
+          Delete
+        </button>
       </div>
     </div>
   </app-card>

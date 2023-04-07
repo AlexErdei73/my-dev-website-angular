@@ -12,7 +12,7 @@
 </form>
 <div *ngIf="_loginState.state.success" class="logout">
   <h1 class="logout__title">Welcome {{_loginState.state.user.username}}!</h1>
-  <app-posts [posts]="userPosts()" [edit]="true"></app-posts>
+  <app-posts [posts]="userPosts()" [edit]="true" [showModal]="onClickShowModal"></app-posts>
 
   <a to="/new-post" class="logout__button--link">
     New Post
@@ -23,3 +23,24 @@
     Logout
   </button>
 </div>
+
+<app-modal [show]="showModal" [card]="{
+  variant: danger, 
+  headerTextLeft: 'Danger!', 
+  headerTextRight: '', 
+  footerTextLeft: 'Permanent data loss', 
+  footerTextRight: ''
+}">
+  <div class="modal-body">
+    <p *ngIf="postsService.errors.length === 0">You are going to delete the post permanently. Are you sure?</p>
+    <app-error-msg *ngIf="postsService.errors.length !== 0" [msg]="postsService.errors[0].msg" />
+    <div class="modal-body__button-container">
+      <button type="button" (click)="onClickDelete()" class="modal-body__button--delete">
+        Delete
+      </button>
+      <button type="button" (click)="onClickCancel()" class="modal-body__button">
+        Cancel
+      </button>
+    </div>
+  </div>
+</app-modal>

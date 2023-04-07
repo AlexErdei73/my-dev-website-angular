@@ -14,6 +14,7 @@ import { Variant } from '../card/card';
 export class PostsComponent implements OnInit {
   @Input() posts!: Post[];
   @Input() edit!: boolean;
+  @Input() showModal!: () => void;
   public user!: User;
   constructor(
     private postsService: PostsService,
@@ -23,6 +24,7 @@ export class PostsComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = this.loginService.state.user;
+    console.log(this.showModal);
   }
 
   getPostCard(post: Post) {
@@ -51,5 +53,10 @@ export class PostsComponent implements OnInit {
   onClickLike(post: Post) {
     console.log(`${post.title} is liked!`);
     this.postsService.toggleLike(post, this.user);
+  }
+
+  onClickDelete(post: Post) {
+    this.showModal();
+    this.postsService.currentPost = post;
   }
 }

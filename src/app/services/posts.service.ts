@@ -10,6 +10,7 @@ import { User } from '../model/user';
 export class PostsService {
   private _posts!: Observable<Post[]>;
   private _currentPost: Post | undefined;
+  private _errors: { msg: string }[] = [];
 
   constructor(private http: HttpClient) {
     this.fetchPosts();
@@ -36,6 +37,10 @@ export class PostsService {
     return this._currentPost;
   }
 
+  get errors() {
+    return this._errors;
+  }
+
   toggleLike(post: Post, user: User) {
     this.http
       .put<{ success: boolean; posts: Post[]; errors: [{ msg: string }] }>(
@@ -54,6 +59,30 @@ export class PostsService {
           }
         },
         error: (err: { message: string }) => {
+          throw new Error(err.message);
+        },
+      });
+  }
+
+  deletePost(token: string) {
+    this.http
+      .delete<{ success: boolean; posts: Post[]; errors: [{ msg: string }] }>(
+        `https://radiant-crag-39178.herokuapp.com/posts/${
+          this._currentPost!._id
+        }`,
+        { headers: { ['Authorization']: token } }
+      )
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            this.fetchPosts();
+          } else {
+            this._errors = res.errors;
+            throw new Error(res.errors[0].msg);
+          }
+        },
+        error: (err: { message: string }) => {
+          this._errors = [{ msg: err.message }];
           throw new Error(err.message);
         },
       });

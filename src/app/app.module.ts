@@ -17,6 +17,7 @@ import { CardComponent } from './components/card/card.component';
 import { HighlightJsModule } from 'ngx-highlight-js';
 import { BlockComponent } from './components/block/block.component';
 import { ErrorMsgComponent } from './components/error-msg/error-msg.component';
+import { ModalComponent } from './components/modal/modal.component';
 
 @NgModule({
   declarations: [
@@ -31,6 +32,7 @@ import { ErrorMsgComponent } from './components/error-msg/error-msg.component';
     CardComponent,
     BlockComponent,
     ErrorMsgComponent,
+    ModalComponent,
   ],
   imports: [
     BrowserModule,
