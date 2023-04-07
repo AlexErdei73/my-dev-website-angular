@@ -11,6 +11,7 @@ export class PostsService {
   private _posts!: Observable<Post[]>;
   private _currentPost: Post | undefined;
   private _errors: { msg: string }[] = [];
+  private _success = false;
 
   constructor(private http: HttpClient) {
     this.fetchPosts();
@@ -41,6 +42,10 @@ export class PostsService {
     return this._errors;
   }
 
+  get success() {
+    return this._success;
+  }
+
   toggleLike(post: Post, user: User) {
     this.http
       .put<{ success: boolean; posts: Post[]; errors: [{ msg: string }] }>(
@@ -65,6 +70,8 @@ export class PostsService {
   }
 
   deletePost(token: string) {
+    this._success = false;
+    this._errors = [];
     this.http
       .delete<{ success: boolean; posts: Post[]; errors: [{ msg: string }] }>(
         `https://radiant-crag-39178.herokuapp.com/posts/${
@@ -75,6 +82,7 @@ export class PostsService {
       .subscribe({
         next: (res) => {
           if (res.success) {
+            this._success = true;
             this.fetchPosts();
           } else {
             this._errors = res.errors;

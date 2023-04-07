@@ -56,7 +56,6 @@ export class LoginComponent implements OnInit {
       this._loginState.state.user.username = this.login.name;
       this._loginState.state.password = this.login.password;
       this._loginState.login();
-      //setTimeout(() => console.log(this._loginState.state), 0);
     }
   }
 
@@ -79,12 +78,19 @@ export class LoginComponent implements OnInit {
 
   onClickDelete() {
     this.postsService.deletePost(this._loginState.state.token);
-    setTimeout(() => {
-      if (this.postsService.errors.length === 0) this.onClickCancel();
-    }, 0);
+    this.await();
+    if (this.postsService.success) this.onClickCancel();
   }
 
   onClickCancel() {
     this.showModal = false;
+  }
+
+  private await() {
+    let success, errors;
+    do {
+      success = this.postsService.success;
+      errors = this.postsService.errors;
+    } while (success || errors.length > 0);
   }
 }
