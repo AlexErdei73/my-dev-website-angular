@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Post } from '../model/post';
 import { map, Observable } from 'rxjs';
+import { User } from '../model/user';
 
 @Injectable({
   providedIn: 'root',
@@ -33,5 +34,28 @@ export class PostsService {
 
   get currentPost(): Post | undefined {
     return this._currentPost;
+  }
+
+  toggleLike(post: Post, user: User) {
+    this.http
+      .put<{ success: boolean; posts: Post[]; errors: [{ msg: string }] }>(
+        `https://radiant-crag-39178.herokuapp.com/posts/${post._id}/likes`,
+        { user: user._id }
+      )
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            const index = post.likes.indexOf(user._id);
+            index === -1
+              ? post.likes.push(user._id)
+              : post.likes.splice(index, 1);
+          } else {
+            throw new Error(res.errors[0].msg);
+          }
+        },
+        error: (err: { message: string }) => {
+          throw new Error(err.message);
+        },
+      });
   }
 }
