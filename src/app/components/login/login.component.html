@@ -12,7 +12,7 @@
 </form>
 <div *ngIf="_loginState.state.success" class="logout">
   <h1 class="logout__title">Welcome {{_loginState.state.user.username}}!</h1>
-  <app-posts [posts]="userPosts()"></app-posts>
+  <app-posts [posts]="userPosts()" [edit]="true"></app-posts>
 
   <a to="/new-post" class="logout__button--link">
     New Post

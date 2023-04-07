@@ -10,6 +10,9 @@
         <button type="button" class="card-body__button" (click)="onClickView(post)">
           View
         </button>
+        <button *ngIf="!edit && user && user._id" class="card-body__button" (click)="onClickLike(post)">
+          {{isPostLiked(post) ? "Unlike" : "Like"}}
+        </button>
       </div>
     </div>
   </app-card>

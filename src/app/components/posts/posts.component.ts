@@ -2,6 +2,7 @@ import { Component, OnInit, Input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Post } from 'src/app/model/post';
 import { User } from 'src/app/model/user';
+import { LoginService } from 'src/app/services/login.service';
 import { PostsService } from 'src/app/services/posts.service';
 import { Variant } from '../card/card';
 
@@ -12,9 +13,17 @@ import { Variant } from '../card/card';
 })
 export class PostsComponent implements OnInit {
   @Input() posts!: Post[];
-  constructor(private postsService: PostsService, private router: Router) {}
+  @Input() edit!: boolean;
+  public user!: User;
+  constructor(
+    private postsService: PostsService,
+    private router: Router,
+    public loginService: LoginService
+  ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.user = this.loginService.state.user;
+  }
 
   getPostCard(post: Post) {
     return {
@@ -33,5 +42,13 @@ export class PostsComponent implements OnInit {
   onClickView(post: Post) {
     this.postsService.currentPost = post;
     this.router.navigateByUrl('/post');
+  }
+
+  isPostLiked(post: Post) {
+    return this.user ? post.likes.indexOf(this.user._id) !== -1 : false;
+  }
+
+  onClickLike(post: Post) {
+    console.log(`${post.title} is liked!`);
   }
 }
