@@ -46,7 +46,13 @@ export class PostsService {
     return this._success;
   }
 
+  private deleteResponse() {
+    this._success = false;
+    this._errors = [];
+  }
+
   toggleLike(post: Post, user: User) {
+    this.deleteResponse();
     this.http
       .put<{ success: boolean; posts: Post[]; errors: [{ msg: string }] }>(
         `https://radiant-crag-39178.herokuapp.com/posts/${post._id}/likes`,
@@ -60,18 +66,19 @@ export class PostsService {
               ? post.likes.push(user._id)
               : post.likes.splice(index, 1);
           } else {
+            this._errors = res.errors;
             throw new Error(res.errors[0].msg);
           }
         },
         error: (err: { message: string }) => {
+          this._errors = [{ msg: err.message }];
           throw new Error(err.message);
         },
       });
   }
 
   deletePost(token: string) {
-    this._success = false;
-    this._errors = [];
+    this.deleteResponse();
     this.http
       .delete<{ success: boolean; posts: Post[]; errors: [{ msg: string }] }>(
         `https://radiant-crag-39178.herokuapp.com/posts/${

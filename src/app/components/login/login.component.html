@@ -14,7 +14,7 @@
   <h1 class="logout__title">Welcome {{_loginState.state.user.username}}!</h1>
   <app-posts [posts]="userPosts()" [edit]="true" [showModal]="onClickShowModal"></app-posts>
 
-  <a to="/new-post" class="logout__button--link">
+  <a href="/new-post" class="logout__button--link">
     New Post
   </a>
 

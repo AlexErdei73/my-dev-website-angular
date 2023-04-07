@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Post } from 'src/app/model/post';
 import { User } from 'src/app/model/user';
 import { LoginService } from 'src/app/services/login.service';
@@ -92,5 +92,9 @@ export class LoginComponent implements OnInit {
       success = this.postsService.success;
       errors = this.postsService.errors;
     } while (success || errors.length > 0);
+  }
+
+  createPost() {
+    throw new Error('Method not implemented.');
   }
 }

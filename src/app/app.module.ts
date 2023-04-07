@@ -18,6 +18,7 @@ import { HighlightJsModule } from 'ngx-highlight-js';
 import { BlockComponent } from './components/block/block.component';
 import { ErrorMsgComponent } from './components/error-msg/error-msg.component';
 import { ModalComponent } from './components/modal/modal.component';
+import { NewPostComponent } from './components/new-post/new-post.component';
 
 @NgModule({
   declarations: [
@@ -33,6 +34,7 @@ import { ModalComponent } from './components/modal/modal.component';
     BlockComponent,
     ErrorMsgComponent,
     ModalComponent,
+    NewPostComponent,
   ],
   imports: [
     BrowserModule,

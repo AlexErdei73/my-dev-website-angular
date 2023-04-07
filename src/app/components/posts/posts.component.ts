@@ -51,7 +51,6 @@ export class PostsComponent implements OnInit {
   }
 
   onClickLike(post: Post) {
-    console.log(`${post.title} is liked!`);
     this.postsService.toggleLike(post, this.user);
   }
 
