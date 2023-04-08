@@ -80,19 +80,56 @@ export class PostsService {
   deletePost(token: string) {
     this.deleteResponse();
     this.http
-      .delete<{ success: boolean; posts: Post[]; errors: [{ msg: string }] }>(
+      .delete<{ success: boolean; post: Post; errors: { msg: string }[] }>(
         `https://radiant-crag-39178.herokuapp.com/posts/${
-          this._currentPost!._id
+          (this._currentPost as any as Post)._id
         }`,
         { headers: { ['Authorization']: token } }
       )
       .subscribe({
         next: (res) => {
           if (res.success) {
-            this._success = true;
             this.fetchPosts();
+            this._posts.subscribe((res) => {
+              this._success = true;
+              console.log('New post deleted!');
+            });
           } else {
             this._errors = res.errors;
+            throw new Error(res.errors[0].msg);
+          }
+        },
+        error: (err: { message: string }) => {
+          this._errors = [{ msg: err.message }];
+          throw new Error(err.message);
+        },
+      });
+  }
+
+  postPost(post: any, token: string) {
+    this.deleteResponse();
+    this.http
+      .post<{ success: boolean; post: Post; errors: { msg: string }[] }>(
+        'https://radiant-crag-39178.herokuapp.com/posts',
+        post,
+        { headers: { ['Authorization']: token } }
+      )
+      .subscribe({
+        next: (res: {
+          success: boolean;
+          post: Post;
+          errors: { msg: string }[];
+        }) => {
+          if (res.success) {
+            this.fetchPosts();
+            this._posts.subscribe((res) => {
+              this._success = true;
+              console.log('New post created!');
+            });
+          } else {
+            this._errors = res.errors;
+            // The next line will deal with unauthorized access when response do not have post
+            if (!res.post) res.post = post;
             throw new Error(res.errors[0].msg);
           }
         },

@@ -78,20 +78,17 @@ export class LoginComponent implements OnInit {
 
   onClickDelete() {
     this.postsService.deletePost(this._loginState.state.token);
-    this.await();
-    if (this.postsService.success) this.onClickCancel();
+    setTimeout(() => {
+      console.log(this.postsService.success);
+      if (this.postsService.success) this.onClickCancel();
+      this.postsService.posts.subscribe((posts) => {
+        this.posts = posts;
+      });
+    }, 500);
   }
 
   onClickCancel() {
     this.showModal = false;
-  }
-
-  private await() {
-    let success, errors;
-    do {
-      success = this.postsService.success;
-      errors = this.postsService.errors;
-    } while (success || errors.length > 0);
   }
 
   createPost() {
