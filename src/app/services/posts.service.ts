@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Post } from '../model/post';
-import { map, Observable } from 'rxjs';
+import { map, Observable, of } from 'rxjs';
 import { User } from '../model/user';
 
 @Injectable({
@@ -89,7 +89,7 @@ export class PostsService {
       .subscribe({
         next: (res) => {
           if (res.success) {
-            this.fetchPosts();
+            this.removePost(res.post);
             this._posts.subscribe((res) => {
               this._success = true;
               console.log('New post deleted!');
@@ -115,21 +115,15 @@ export class PostsService {
         { headers: { ['Authorization']: token } }
       )
       .subscribe({
-        next: (res: {
-          success: boolean;
-          post: Post;
-          errors: { msg: string }[];
-        }) => {
+        next: (res) => {
           if (res.success) {
-            this.fetchPosts();
+            this.addPost(res.post);
             this._posts.subscribe((res) => {
               this._success = true;
-              console.log('New post created!');
+              console.log('New post added!');
             });
           } else {
             this._errors = res.errors;
-            // The next line will deal with unauthorized access when response do not have post
-            if (!res.post) res.post = post;
             throw new Error(res.errors[0].msg);
           }
         },
@@ -138,5 +132,22 @@ export class PostsService {
           throw new Error(err.message);
         },
       });
+  }
+
+  addPost(post: Post) {
+    this._posts.subscribe((posts) => {
+      const newPosts = posts;
+      newPosts.push(post);
+      this._posts = of(newPosts);
+    });
+  }
+
+  removePost(post: Post) {
+    this._posts.subscribe((posts) => {
+      const newPosts = posts;
+      const index = newPosts.findIndex((element) => element._id === post._id);
+      newPosts.splice(index, 1);
+      this._posts = of(newPosts);
+    });
   }
 }

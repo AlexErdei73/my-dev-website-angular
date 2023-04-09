@@ -84,7 +84,7 @@ export class LoginComponent implements OnInit {
       this.postsService.posts.subscribe((posts) => {
         this.posts = posts;
       });
-    }, 500);
+    }, 300);
   }
 
   onClickCancel() {
