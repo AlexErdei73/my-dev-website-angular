@@ -84,6 +84,32 @@ export class PostsService {
       });
   }
 
+  togglePublish(post: Post, token: string) {
+    this.http
+      .put<{ success: boolean; post: Post; errors: [{ msg: string }] }>(
+        `https://radiant-crag-39178.herokuapp.com/posts/${post._id}`,
+        {
+          ...post,
+          published: !post.published,
+        },
+        { headers: { ['Authorization']: token } }
+      )
+      .subscribe({
+        next: (res) => {
+          if (res.success) {
+            post.published = !post.published;
+          } else {
+            this._errors = res.errors;
+            throw new Error(res.errors[0].msg);
+          }
+        },
+        error: (err: { message: string }) => {
+          this._errors = [{ msg: err.message }];
+          console.error(err.message);
+        },
+      });
+  }
+
   deletePost(token: string) {
     return this.http.delete<{
       success: boolean;

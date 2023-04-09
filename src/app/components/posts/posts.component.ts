@@ -59,6 +59,6 @@ export class PostsComponent implements OnInit {
   }
 
   onClickPublish(post: Post) {
-    console.log('Publish is clicked!');
+    this.postsService.togglePublish(post, this.loginService.state.token);
   }
 }
