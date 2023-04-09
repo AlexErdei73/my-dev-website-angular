@@ -42,17 +42,24 @@ export class PostsService {
     return this._errors;
   }
 
+  set errors(err) {
+    this._errors = err;
+  }
+
   get success() {
     return this._success;
   }
 
-  private deleteResponse() {
+  set success(success) {
+    this._success = success;
+  }
+
+  deleteResponse() {
     this._success = false;
     this._errors = [];
   }
 
   toggleLike(post: Post, user: User) {
-    this.deleteResponse();
     this.http
       .put<{ success: boolean; posts: Post[]; errors: [{ msg: string }] }>(
         `https://radiant-crag-39178.herokuapp.com/posts/${post._id}/likes`,
@@ -72,66 +79,33 @@ export class PostsService {
         },
         error: (err: { message: string }) => {
           this._errors = [{ msg: err.message }];
-          throw new Error(err.message);
+          console.error(err.message);
         },
       });
   }
 
   deletePost(token: string) {
-    this.deleteResponse();
-    this.http
-      .delete<{ success: boolean; post: Post; errors: { msg: string }[] }>(
-        `https://radiant-crag-39178.herokuapp.com/posts/${
-          (this._currentPost as any as Post)._id
-        }`,
-        { headers: { ['Authorization']: token } }
-      )
-      .subscribe({
-        next: (res) => {
-          if (res.success) {
-            this.removePost(res.post);
-            this._posts.subscribe((res) => {
-              this._success = true;
-              console.log('New post deleted!');
-            });
-          } else {
-            this._errors = res.errors;
-            throw new Error(res.errors[0].msg);
-          }
-        },
-        error: (err: { message: string }) => {
-          this._errors = [{ msg: err.message }];
-          throw new Error(err.message);
-        },
-      });
+    return this.http.delete<{
+      success: boolean;
+      post: Post;
+      errors: { msg: string }[];
+    }>(
+      `https://radiant-crag-39178.herokuapp.com/posts/${
+        (this._currentPost as any as Post)._id
+      }`,
+      { headers: { ['Authorization']: token } }
+    );
   }
 
   postPost(post: any, token: string) {
     this.deleteResponse();
-    this.http
-      .post<{ success: boolean; post: Post; errors: { msg: string }[] }>(
-        'https://radiant-crag-39178.herokuapp.com/posts',
-        post,
-        { headers: { ['Authorization']: token } }
-      )
-      .subscribe({
-        next: (res) => {
-          if (res.success) {
-            this.addPost(res.post);
-            this._posts.subscribe((res) => {
-              this._success = true;
-              console.log('New post added!');
-            });
-          } else {
-            this._errors = res.errors;
-            throw new Error(res.errors[0].msg);
-          }
-        },
-        error: (err: { message: string }) => {
-          this._errors = [{ msg: err.message }];
-          throw new Error(err.message);
-        },
-      });
+    return this.http.post<{
+      success: boolean;
+      post: Post;
+      errors: { msg: string }[];
+    }>('https://radiant-crag-39178.herokuapp.com/posts', post, {
+      headers: { ['Authorization']: token },
+    });
   }
 
   addPost(post: Post) {

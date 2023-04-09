@@ -73,25 +73,33 @@ export class LoginComponent implements OnInit {
   }
 
   onClickShowModal() {
+    this.postsService.deleteResponse();
     this.showModal = true;
   }
 
   onClickDelete() {
-    this.postsService.deletePost(this._loginState.state.token);
-    setTimeout(() => {
-      console.log(this.postsService.success);
-      if (this.postsService.success) this.onClickCancel();
-      this.postsService.posts.subscribe((posts) => {
-        this.posts = posts;
-      });
-    }, 300);
+    this.postsService.deletePost(this._loginState.state.token).subscribe({
+      next: (res) => {
+        if (res.success) {
+          this.postsService.removePost(res.post);
+          this.postsService.posts.subscribe((posts) => {
+            this.postsService.success = true;
+            this.posts = posts;
+            this.onClickCancel();
+          });
+        } else {
+          this.postsService.errors = res.errors;
+          throw new Error(res.errors[0].msg);
+        }
+      },
+      error: (err: { message: string }) => {
+        this.postsService.errors = [{ msg: err.message }];
+        console.error(err.message);
+      },
+    });
   }
 
   onClickCancel() {
     this.showModal = false;
-  }
-
-  createPost() {
-    throw new Error('Method not implemented.');
   }
 }

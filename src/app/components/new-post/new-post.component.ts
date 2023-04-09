@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { LoginService } from 'src/app/services/login.service';
 import { PostsService } from 'src/app/services/posts.service';
+import { Router } from '@angular/router';
 
 interface NewPost {
   title: string;
@@ -18,7 +19,8 @@ export class NewPostComponent implements OnInit {
 
   constructor(
     private loginService: LoginService,
-    private postsService: PostsService
+    private postsService: PostsService,
+    private router: Router
   ) {}
   ngOnInit() {
     this.newPost = {
@@ -31,7 +33,27 @@ export class NewPostComponent implements OnInit {
   onSubmit(newPostForm: { valid: any }) {
     if (newPostForm.valid) {
       this.newPost.msg = '';
-      this.postsService.postPost(this.newPost, this.loginService.state.token);
+      this.postsService
+        .postPost(this.newPost, this.loginService.state.token)
+        .subscribe({
+          next: (res) => {
+            if (res.success) {
+              this.postsService.addPost(res.post);
+              this.postsService.posts.subscribe((res) => {
+                this.postsService.success = true;
+                this.router.navigate(['/login']);
+              });
+            } else {
+              this.postsService.errors = res.errors;
+              throw new Error(res.errors[0].msg);
+            }
+          },
+          error: (err: { message: string }) => {
+            this.postsService.errors = [{ msg: err.message }];
+            this.newPost.msg = err.message;
+            console.error(err.message);
+          },
+        });
     } else {
       this.newPost.msg = 'Title is required!';
     }

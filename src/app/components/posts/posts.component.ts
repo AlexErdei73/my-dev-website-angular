@@ -24,7 +24,6 @@ export class PostsComponent implements OnInit {
 
   ngOnInit(): void {
     this.user = this.loginService.state.user;
-    console.log(this.showModal);
   }
 
   getPostCard(post: Post) {
