@@ -57,4 +57,8 @@ export class PostsComponent implements OnInit {
     this.showModal();
     this.postsService.currentPost = post;
   }
+
+  onClickPublish(post: Post) {
+    console.log('Publish is clicked!');
+  }
 }
