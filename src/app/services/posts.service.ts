@@ -85,15 +85,10 @@ export class PostsService {
       )
       .subscribe({
         next: (res) => {
-          if (res.success) {
-            const index = post.likes.indexOf(user._id);
-            index === -1
-              ? post.likes.push(user._id)
-              : post.likes.splice(index, 1);
-          } else {
-            this._errors = res.errors;
-            throw new Error(res.errors[0].msg);
-          }
+          const index = post.likes.indexOf(user._id);
+          index === -1
+            ? post.likes.push(user._id)
+            : post.likes.splice(index, 1);
         },
         error: (err) => this.handleErrorCallBack(err),
       });
@@ -110,13 +105,8 @@ export class PostsService {
         { headers: { ['Authorization']: token } }
       )
       .subscribe({
-        next: (res) => {
-          if (res.success) {
-            post.published = !post.published;
-          } else {
-            this._errors = res.errors;
-            throw new Error(res.errors[0].msg);
-          }
+        next: () => {
+          post.published = !post.published;
         },
         error: (err) => this.handleErrorCallBack(err),
       });

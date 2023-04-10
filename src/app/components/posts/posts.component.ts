@@ -59,6 +59,7 @@ export class PostsComponent implements OnInit {
   onClickDelete(post: Post) {
     this.showModal = true;
     this.postsService.currentPost = post;
+    this.postsService.errors = [];
   }
 
   onClickPublish(post: Post) {
@@ -68,20 +69,16 @@ export class PostsComponent implements OnInit {
   onClickModalDelete() {
     this.postsService.deletePost(this.loginService.state.token).subscribe({
       next: (res) => {
-        if (res.success) {
-          this.postsService.removePost(res.post);
-          this.postsService.posts.subscribe((posts) => {
-            this.postsService.success = true;
-            this.posts = posts;
-            this.onClickModalCancel();
-          });
-        } else {
-          this.postsService.errors = res.errors;
-          throw new Error(res.errors[0].msg);
-        }
+        this.postsService.removePost(res.post);
+        this.postsService.posts.subscribe((posts) => {
+          this.postsService.success = true;
+          this.posts = posts;
+          this.onClickModalCancel();
+        });
       },
       error: (err) => {
-        const message = err.error ? err.error : err.message;
+        const message =
+          err.error && typeof err.error === 'string' ? err.error : err.message;
         this.postsService.errors = [{ msg: message }];
         console.error(message);
       },

@@ -37,16 +37,11 @@ export class NewPostComponent implements OnInit {
         .postPost(this.newPost, this.loginService.state.token)
         .subscribe({
           next: (res) => {
-            if (res.success) {
-              this.postsService.addPost(res.post);
-              this.postsService.posts.subscribe((res) => {
-                this.postsService.success = true;
-                this.router.navigate(['/login']);
-              });
-            } else {
-              this.postsService.errors = res.errors;
-              throw new Error(res.errors[0].msg);
-            }
+            this.postsService.addPost(res.post);
+            this.postsService.posts.subscribe((res) => {
+              this.postsService.success = true;
+              this.router.navigate(['/login']);
+            });
           },
           error: (err) => {
             const message = err.error ? err.error : err.message;

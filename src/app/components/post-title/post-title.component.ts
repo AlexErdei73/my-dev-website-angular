@@ -24,21 +24,15 @@ export class PostTitleComponent {
         .updatePost(this.post, this.loginService.state.token)
         .subscribe({
           next: (res) => {
-            if (res.success) {
-              this.postsService.posts.subscribe((posts) => {
-                const index = posts.findIndex(
-                  (post) => post._id === this.post._id
-                );
-                posts[index] = this.post;
-              });
-              this.postsService.errors = [];
-              this.errors = [];
-              this.editing = false;
-            } else {
-              this.postsService.errors = res.errors;
-              this.errors = res.errors;
-              console.error(res.errors[0].msg);
-            }
+            this.postsService.posts.subscribe((posts) => {
+              const index = posts.findIndex(
+                (post) => post._id === this.post._id
+              );
+              posts[index] = this.post;
+            });
+            this.postsService.errors = [];
+            this.errors = [];
+            this.editing = false;
           },
           error: (err) => {
             const errors: { msg: string }[] =
