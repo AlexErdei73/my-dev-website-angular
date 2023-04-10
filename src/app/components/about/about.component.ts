@@ -9,8 +9,20 @@ import { PostsService } from 'src/app/services/posts.service';
 })
 export class AboutComponent implements OnInit {
   posts!: Post[];
+  empty_post: Post = {
+    _id: '',
+    title: '...Loading',
+    author: '',
+    content: [],
+    comments: [],
+    likes: [],
+    published: false,
+    createdAt: '',
+    updatedAt: '',
+  };
   constructor(private postService: PostsService) {}
   ngOnInit(): void {
+    this.posts = [this.empty_post];
     this.postService.posts.subscribe((posts) => (this.posts = posts));
   }
 
