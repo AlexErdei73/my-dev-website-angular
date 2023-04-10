@@ -12,6 +12,7 @@ export class PostsService {
   private _currentPost: Post | undefined;
   private _errors: { msg: string }[] = [];
   private _success = false;
+  showErrorDlg = false;
 
   constructor(private http: HttpClient) {
     this.fetchPosts();
@@ -79,6 +80,7 @@ export class PostsService {
         },
         error: (err: { message: string }) => {
           this._errors = [{ msg: err.message }];
+          this.showErrorDlg = true;
           console.error(err.message);
         },
       });
@@ -103,9 +105,11 @@ export class PostsService {
             throw new Error(res.errors[0].msg);
           }
         },
-        error: (err: { message: string }) => {
-          this._errors = [{ msg: err.message }];
-          console.error(err.message);
+        error: (err) => {
+          const message = err.error ? err.error : err.message;
+          this._errors = [{ msg: message }];
+          this.showErrorDlg = true;
+          console.error(message);
         },
       });
   }
@@ -149,5 +153,9 @@ export class PostsService {
       newPosts.splice(index, 1);
       this._posts = of(newPosts);
     });
+  }
+
+  closeErrorDlg(): void {
+    this.showErrorDlg = false;
   }
 }

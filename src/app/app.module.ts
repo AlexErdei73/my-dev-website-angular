@@ -19,6 +19,7 @@ import { BlockComponent } from './components/block/block.component';
 import { ErrorMsgComponent } from './components/error-msg/error-msg.component';
 import { ModalComponent } from './components/modal/modal.component';
 import { NewPostComponent } from './components/new-post/new-post.component';
+import { ErrorDlgComponent } from './components/error-dlg/error-dlg.component';
 
 @NgModule({
   declarations: [
@@ -35,6 +36,7 @@ import { NewPostComponent } from './components/new-post/new-post.component';
     ErrorMsgComponent,
     ModalComponent,
     NewPostComponent,
+    ErrorDlgComponent,
   ],
   imports: [
     BrowserModule,
