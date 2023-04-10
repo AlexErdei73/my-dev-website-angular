@@ -5,12 +5,12 @@
     footerTextLeft: 'Permanent data loss', 
     footerTextRight: ''
   }">
-			<div class="modal-body">
-				<app-error-msg [msg]="error.msg" />
-				<div class="modal-body__button-container">
-					<button class="modal-body__button" (click)="close()">
-						OK
-					</button>
-				</div>
-			</div>
+  <div class="modal-body">
+    <app-error-msg [msg]="error | json" />
+    <div class="modal-body__button-container">
+      <button class="modal-body__button" (click)="close()">
+        OK
+      </button>
+    </div>
+  </div>
 </app-modal>
