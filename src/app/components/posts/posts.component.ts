@@ -44,6 +44,7 @@ export class PostsComponent implements OnInit {
 
   onClickView(post: Post) {
     this.postsService.currentPost = post;
+    this.postsService.edit = this.edit;
     this.router.navigateByUrl('/post');
   }
 

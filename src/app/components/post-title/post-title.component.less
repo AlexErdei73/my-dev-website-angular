@@ -1,0 +1,37 @@
+@import "../../app.component.less";
+@import "../post/post.component.less";
+
+.flex {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.post-title {
+  .flex();
+  &__title {
+    margin: 0;
+    font-size: xx-large;
+  }
+  &__form {
+    width: 100%;
+    .flex();
+    gap: @gap;
+  }
+  &__errors {
+    .flex-col(@gap);
+    div {
+      margin: 0;
+    }
+  }
+  button {
+    .button();
+  }
+  button:hover {
+    .button-hover();
+  }
+  input {
+    flex-grow: 1;
+    .input();
+  }
+}

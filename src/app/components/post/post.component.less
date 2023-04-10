@@ -3,15 +3,12 @@
 
 .post {
   .app-margin();
-  .title();
-}
-
-@media screen and (max-height: @page-height-turning-point) {
-  .nav-horizontal();
-}
-
-@media screen and (max-width: @page-width-turning-point) {
-  .delete-logo();
-  .delete-first-item();
-  .nav-horizontal();
+  padding-top: 0;
+  .flex-row(@gap);
+  flex-direction: row-reverse;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  article {
+    max-width: 100%;
+  }
 }

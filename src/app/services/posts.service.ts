@@ -10,6 +10,7 @@ import { User } from '../model/user';
 export class PostsService {
   private _posts!: Observable<Post[]>;
   private _currentPost: Post | undefined;
+  private _edit = false;
   private _errors: { msg: string }[] = [];
   private _success = false;
   showErrorDlg = false;
@@ -53,6 +54,14 @@ export class PostsService {
 
   set success(success) {
     this._success = success;
+  }
+
+  get edit() {
+    return this._edit;
+  }
+
+  set edit(edit: boolean) {
+    this._edit = edit;
   }
 
   deleteResponse() {
