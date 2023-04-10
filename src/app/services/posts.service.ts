@@ -60,6 +60,14 @@ export class PostsService {
     this._errors = [];
   }
 
+  private handleErrorCallBack(err: any) {
+    const message =
+      err.error && typeof err.error === 'string' ? err.error : err.message;
+    this._errors = [{ msg: message }];
+    this.showErrorDlg = true;
+    console.error(message);
+  }
+
   toggleLike(post: Post, user: User) {
     this.http
       .put<{ success: boolean; posts: Post[]; errors: [{ msg: string }] }>(
@@ -78,11 +86,7 @@ export class PostsService {
             throw new Error(res.errors[0].msg);
           }
         },
-        error: (err: { message: string }) => {
-          this._errors = [{ msg: err.message }];
-          this.showErrorDlg = true;
-          console.error(err.message);
-        },
+        error: (err) => this.handleErrorCallBack(err),
       });
   }
 
@@ -105,12 +109,7 @@ export class PostsService {
             throw new Error(res.errors[0].msg);
           }
         },
-        error: (err) => {
-          const message = err.error ? err.error : err.message;
-          this._errors = [{ msg: message }];
-          this.showErrorDlg = true;
-          console.error(message);
-        },
+        error: (err) => this.handleErrorCallBack(err),
       });
   }
 

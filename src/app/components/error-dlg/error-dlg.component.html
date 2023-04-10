@@ -1,12 +1,12 @@
 <app-modal [show]="show" [card]="{
     variant: danger, 
-    headerTextLeft: 'Danger!', 
+    headerTextLeft: 'Error!', 
     headerTextRight: '', 
-    footerTextLeft: 'Permanent data loss', 
+    footerTextLeft: 'Sorry, but it happens sometimes', 
     footerTextRight: ''
   }">
   <div class="modal-body">
-    <app-error-msg [msg]="error | json" />
+    <app-error-msg [msg]="error.msg" />
     <div class="modal-body__button-container">
       <button class="modal-body__button" (click)="close()">
         OK
