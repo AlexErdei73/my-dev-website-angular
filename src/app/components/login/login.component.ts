@@ -92,9 +92,10 @@ export class LoginComponent implements OnInit {
           throw new Error(res.errors[0].msg);
         }
       },
-      error: (err: { message: string }) => {
-        this.postsService.errors = [{ msg: err.message }];
-        console.error(err.message);
+      error: (err) => {
+        const message = err.error ? err.error : err.message;
+        this.postsService.errors = [{ msg: message }];
+        console.error(message);
       },
     });
   }
