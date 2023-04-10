@@ -9,7 +9,7 @@
     <button *ngIf="errors.length === 0" type="button" (click)="onClickCancel()">
       Cancel
     </button>
-    <div class="post-title__errors">
+    <div *ngIf="errors.length > 0" class="post-title__errors">
       <app-error-msg [msg]="error.msg" *ngFor="let error of errors" />
     </div>
   </form>
