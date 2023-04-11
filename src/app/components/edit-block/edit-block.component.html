@@ -1,1 +1,56 @@
-<p class="edit-block">edit-block works!</p>
+<form
+      class="edit-block"
+      (ngSubmit)="onSubmit(newBlockForm)"
+      #newBlockForm="ngForm"
+    >
+      <div class="input-container">
+          <input *ngIf="block.type === 'subtitle'"
+            type="text"
+            [(ngModel)]="newBlock.text"
+            name="newBlockText"
+            #newBlockText="ngModel"
+            required
+            class="edit-block__input"
+          />
+          <textarea
+            *ngIf="block.type !== 'subtitle'"
+            class="edit-block__textarea"
+            [rows]="numberOfLines(newBlock.text)"
+            [(ngModel)]="newBlock.text"
+            name="newBlockText"
+            #newBlockText="ngModel"
+          ></textarea>
+        <div class="type-area">
+          <select
+            name="newBlockType"
+            [(ngModel)]="newBlock.type"
+            #newBlockType="ngModel"
+          >
+            <option value="paragraph">Paragraph</option>
+            <option value="subtitle">Subtitle</option>
+            <option value="code">Code</option>
+          </select>
+          
+            <select
+              *ngIf="block.type === 'code'"
+              name="newBlockLanguage"
+              [(ngModel)]="newBlock.language"
+              #newBlockLanguage="ngModel"
+            >
+              <option value="html">HTML</option>
+              <option value="css">CSS</option>
+              <option value="javascript">JavaScript</option>
+            </select>
+
+        </div>
+      </div>
+      <div class="button-container">
+        <button type="submit">Submit</button>
+        <button type="button" (click)="onCancel()">
+          Cancel
+        </button>
+      </div>
+      <div *ngIf="errors.length > 0" class="errors-container">
+            <app-error-msg [msg]="error.msg" *ngFor="let error of errors"/>
+      </div>
+    </form>

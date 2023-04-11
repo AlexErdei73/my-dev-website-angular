@@ -17,6 +17,6 @@
     </button>
   </div>
 
-  <app-edit-block *ngIf="showEditing" block={block} (submit)="submit(block)" (cancel)="setEditing(false)" />
+  <app-edit-block *ngIf="showEditing" [block]="block" [errors]="errors" (submitBlock)="onSubmitBlock($event)" (cancel)="onCancel($event)" />
 
 </div>

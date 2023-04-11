@@ -11,6 +11,7 @@ export class BlockComponent {
   @Input() block!: Block;
   @Input() edit!: boolean;
   showEditing = false;
+  errors: { msg: string }[] = [];
 
   private addLinks(text: string, links: Link[]) {
     let shift = 0; //Shift the position from the original with the combined lengths of the insertations
@@ -46,7 +47,14 @@ export class BlockComponent {
     console.log('Delete clicked! ', block);
   }
 
-  submit(block: Block) {
+  onSubmitBlock(block: Block) {
     console.log('Block is submitted! ', block);
+    this.errors.push({ msg: 'Text invalid error!' });
+    if (this.errors.length === 0) this.setEditing(false);
+  }
+
+  onCancel(block: Block) {
+    console.log('Editing is canceled!', block);
+    this.setEditing(false);
   }
 }
