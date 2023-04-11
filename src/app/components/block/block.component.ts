@@ -9,6 +9,8 @@ import { Link } from 'src/app/model/link';
 })
 export class BlockComponent {
   @Input() block!: Block;
+  @Input() edit!: boolean;
+  showEditing = false;
 
   private addLinks(text: string, links: Link[]) {
     let shift = 0; //Shift the position from the original with the combined lengths of the insertations
@@ -34,5 +36,17 @@ export class BlockComponent {
 
   textWithLinks() {
     return this.addLinks(this.block.text, this.block.links);
+  }
+
+  setEditing(editing: boolean) {
+    this.showEditing = editing;
+  }
+
+  remove(block: Block) {
+    console.log('Delete clicked! ', block);
+  }
+
+  submit(block: Block) {
+    console.log('Block is submitted! ', block);
   }
 }

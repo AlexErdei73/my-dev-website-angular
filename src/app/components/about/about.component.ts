@@ -27,7 +27,7 @@ export class AboutComponent implements OnInit {
   }
 
   aboutPost() {
-    const ABOUT_POST = '6404bca2160e826767e36aa3';
+    const ABOUT_POST = '64347b31a310964c06459b3b';
     return this.posts.find((post) => post._id === ABOUT_POST);
   }
 }

@@ -8,9 +8,8 @@ import { PostsService } from 'src/app/services/posts.service';
   styleUrls: ['./post.component.less'],
 })
 export class PostComponent implements OnInit {
-  @Input() post: Post | undefined;
+  @Input() post = this.postsService.currentPost;
+  edit = this.postsService.edit;
   constructor(private postsService: PostsService) {}
-  ngOnInit(): void {
-    if (!this.post) this.post = this.postsService.currentPost;
-  }
+  ngOnInit(): void {}
 }

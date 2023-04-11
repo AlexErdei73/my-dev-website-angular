@@ -1,6 +1,6 @@
 <div class="post">
   <article *ngIf="post">
     <app-post-title [post]="post!"></app-post-title>
-    <app-block [block]="block" *ngFor="let block of post.content"></app-block>
+    <app-block [block]="block" [edit]="edit" *ngFor="let block of post.content"></app-block>
   </article>
 </div>

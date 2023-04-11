@@ -21,6 +21,7 @@ import { ModalComponent } from './components/modal/modal.component';
 import { NewPostComponent } from './components/new-post/new-post.component';
 import { ErrorDlgComponent } from './components/error-dlg/error-dlg.component';
 import { PostTitleComponent } from './components/post-title/post-title.component';
+import { EditBlockComponent } from './components/edit-block/edit-block.component';
 
 @NgModule({
   declarations: [
@@ -39,6 +40,7 @@ import { PostTitleComponent } from './components/post-title/post-title.component
     NewPostComponent,
     ErrorDlgComponent,
     PostTitleComponent,
+    EditBlockComponent,
   ],
   imports: [
     BrowserModule,
