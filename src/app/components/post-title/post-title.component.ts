@@ -35,10 +35,11 @@ export class PostTitleComponent {
             this.editing = false;
           },
           error: (err) => {
-            const errors: { msg: string }[] =
-              err.error && err.error.errors
-                ? err.error.errors
-                : [{ msg: err.message }];
+            let errors: { msg: string }[] = [{ msg: err.message }];
+            if (err.error) {
+              if (typeof err.error === 'string') errors = [{ msg: err.error }];
+              if (err.error.errors) errors = err.error.errors;
+            }
             this.postsService.errors = errors;
             this.errors = errors;
             console.error(errors[0].msg);
