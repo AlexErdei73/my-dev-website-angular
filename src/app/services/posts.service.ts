@@ -162,6 +162,21 @@ export class PostsService {
     );
   }
 
+  saveBlock(block: Block, token: string) {
+    this.deleteResponse();
+    return this.http.post<{
+      success: boolean;
+      block: Block;
+      errors: { msg: string }[];
+    }>(
+      `https://radiant-crag-39178.herokuapp.com/posts/${block.post}/blocks`,
+      block,
+      {
+        headers: { ['Authorization']: token },
+      }
+    );
+  }
+
   addPost(post: Post) {
     this._posts.subscribe((posts) => {
       const newPosts = posts;

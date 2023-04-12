@@ -63,18 +63,36 @@ export class BlockComponent {
           this.errors = [{ msg: err.message }];
           if (err.error.errors) this.errors = err.error.errors;
           if (typeof err.error === 'string') this.errors = [{ msg: err.error }];
-          this.showEditing = true;
+          this.setEditing(true);
+        },
+      });
+  }
+
+  save(block: Block) {
+    this.postsService
+      .saveBlock(block, this.loginService.state.token)
+      .subscribe({
+        next: (res) => {
+          this.postsService.currentPost!.content.push(res.block);
+          this.errors = [];
+          this.onCancel(block);
+        },
+        error: (err) => {
+          this.errors = [{ msg: err.message }];
+          if (err.error.errors) this.errors = err.error.errors;
+          if (typeof err.error === 'string') this.errors = [{ msg: err.error }];
+          this.block = block;
+          this.setEditing(true);
         },
       });
   }
 
   onSubmitBlock(block: Block) {
     console.log('Block is submitted! ', block);
-    if (this.errors.length === 0) this.setEditing(false);
+    if (block._id === '') this.save(block);
   }
 
   onCancel(block: Block) {
-    console.log('Editing is canceled!', block);
-    this.setEditing(false);
+    if (this.errors.length === 0) this.setEditing(false);
   }
 }
