@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Post } from '../model/post';
 import { map, Observable, of } from 'rxjs';
 import { User } from '../model/user';
+import { Block } from '../model/block';
 
 @Injectable({
   providedIn: 'root',
@@ -145,6 +146,20 @@ export class PostsService {
     }>(`https://radiant-crag-39178.herokuapp.com/posts/${post._id}`, post, {
       headers: { ['Authorization']: token },
     });
+  }
+
+  deleteBlock(block: Block, token: string) {
+    this.deleteResponse();
+    return this.http.delete<{
+      success: boolean;
+      block: Block;
+      errors: { msg: string }[];
+    }>(
+      `https://radiant-crag-39178.herokuapp.com/posts/${block.post}/blocks/${block._id}`,
+      {
+        headers: { ['Authorization']: token },
+      }
+    );
   }
 
   addPost(post: Post) {

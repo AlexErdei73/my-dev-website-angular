@@ -1,6 +1,8 @@
 import { Component, Input } from '@angular/core';
 import { Block } from 'src/app/model/block';
 import { Link } from 'src/app/model/link';
+import { LoginService } from 'src/app/services/login.service';
+import { PostsService } from 'src/app/services/posts.service';
 
 @Component({
   selector: 'app-block',
@@ -12,6 +14,10 @@ export class BlockComponent {
   @Input() edit!: boolean;
   showEditing = false;
   errors: { msg: string }[] = [];
+  constructor(
+    private postsService: PostsService,
+    private loginService: LoginService
+  ) {}
 
   private addLinks(text: string, links: Link[]) {
     let shift = 0; //Shift the position from the original with the combined lengths of the insertations
@@ -44,12 +50,26 @@ export class BlockComponent {
   }
 
   remove(block: Block) {
-    console.log('Delete clicked! ', block);
+    this.postsService
+      .deleteBlock(block, this.loginService.state.token)
+      .subscribe({
+        next: () => {
+          const index = this.postsService.currentPost!.content.findIndex(
+            (block) => block._id === this.block._id
+          );
+          this.postsService.currentPost!.content.splice(index, 1);
+        },
+        error: (err) => {
+          this.errors = [{ msg: err.message }];
+          if (err.error.errors) this.errors = err.error.errors;
+          if (typeof err.error === 'string') this.errors = [{ msg: err.error }];
+          this.showEditing = true;
+        },
+      });
   }
 
   onSubmitBlock(block: Block) {
     console.log('Block is submitted! ', block);
-    this.errors.push({ msg: 'Text invalid error!' });
     if (this.errors.length === 0) this.setEditing(false);
   }
 
