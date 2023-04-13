@@ -10,7 +10,7 @@ import { PostsService } from 'src/app/services/posts.service';
 })
 export class PostComponent implements OnInit {
   @Input() post = this.postsService.currentPost;
-  edit = this.postsService.edit;
+  @Input() edit = this.postsService.edit;
   newBlock: Block = {
     _id: '',
     post: (this.post as Post)._id,

@@ -63,6 +63,7 @@ export class BlockComponent {
           this.errors = [{ msg: err.message }];
           if (err.error.errors) this.errors = err.error.errors;
           if (typeof err.error === 'string') this.errors = [{ msg: err.error }];
+          //We show error messages in the edit-block component
           this.setEditing(true);
         },
       });
@@ -82,7 +83,27 @@ export class BlockComponent {
           if (err.error.errors) this.errors = err.error.errors;
           if (typeof err.error === 'string') this.errors = [{ msg: err.error }];
           this.block = block;
-          this.setEditing(true);
+        },
+      });
+  }
+
+  update(block: Block) {
+    this.postsService
+      .updateBlock(block, this.loginService.state.token)
+      .subscribe({
+        next: () => {
+          const index = this.postsService.currentPost!.content.findIndex(
+            (block) => block._id === this.block._id
+          );
+          this.postsService.currentPost!.content.splice(index, 1, block);
+          this.errors = [];
+          this.onCancel(block);
+        },
+        error: (err): void => {
+          this.errors = [{ msg: err.message }];
+          if (err.error.errors) this.errors = err.error.errors;
+          if (typeof err.error === 'string') this.errors = [{ msg: err.error }];
+          this.block = block;
         },
       });
   }
@@ -90,9 +111,10 @@ export class BlockComponent {
   onSubmitBlock(block: Block) {
     console.log('Block is submitted! ', block);
     if (block._id === '') this.save(block);
+    else this.update(block);
   }
 
-  onCancel(block: Block) {
+  onCancel(_block: Block) {
     if (this.errors.length === 0) this.setEditing(false);
   }
 }

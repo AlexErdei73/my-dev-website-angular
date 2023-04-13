@@ -10,7 +10,7 @@ import { PostsService } from 'src/app/services/posts.service';
 })
 export class PostTitleComponent {
   @Input() post!: Post;
-  edit = this.postsService.edit;
+  @Input() edit = this.postsService.edit;
   editing = false;
   errors: { msg: string }[] = [];
   constructor(
