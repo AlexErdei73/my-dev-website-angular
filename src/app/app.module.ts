@@ -22,6 +22,7 @@ import { NewPostComponent } from './components/new-post/new-post.component';
 import { ErrorDlgComponent } from './components/error-dlg/error-dlg.component';
 import { PostTitleComponent } from './components/post-title/post-title.component';
 import { EditBlockComponent } from './components/edit-block/edit-block.component';
+import { AuthorComponent } from './components/author/author.component';
 
 @NgModule({
   declarations: [
@@ -41,6 +42,7 @@ import { EditBlockComponent } from './components/edit-block/edit-block.component
     ErrorDlgComponent,
     PostTitleComponent,
     EditBlockComponent,
+    AuthorComponent,
   ],
   imports: [
     BrowserModule,

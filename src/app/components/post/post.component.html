@@ -1,7 +1,12 @@
 <div class="post">
+  <app-author></app-author>
   <article *ngIf="post">
     <app-post-title [post]="post!" [edit]="edit"></app-post-title>
-    <app-block [block]="block" [edit]="edit" *ngFor="let block of post.content"></app-block>
+    <app-block
+      [block]="block"
+      [edit]="edit"
+      *ngFor="let block of post.content"
+    ></app-block>
     <app-block *ngIf="edit" [block]="newBlock" [edit]="edit"></app-block>
   </article>
 </div>
