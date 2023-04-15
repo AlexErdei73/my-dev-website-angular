@@ -1,3 +1,61 @@
-<div class="signup">
-  <h1 class="signup__title">Sign Up</h1>
+<div class="form-group">
+  <form
+			class="signup"
+      name="signupForm"
+			(ngSubmit)="onSubmit(signupForm)"
+			validate
+      #signupForm="ngForm">
+			<h1 class="signup__title">
+				{{loginSuccess ? "Update User" : "Sign Up"}}
+			</h1>
+			<label htmlFor="username">Username*</label>
+			<input
+				type="text"
+				id="username"
+				name="signupUsername"
+				class="signup__username"
+				[(ngModel)]="signup.username"
+				required
+				#signupUsername = "ngModel"
+			/>
+			<label *ngIf="!loginSuccess" htmlFor="password">Password*</label>
+			<input	*ngIf="!loginSuccess"
+					type="text"
+					id="password"
+					class="signup__password"
+					name="signupPassword"
+					[(ngModel)]="signup.password"
+					required
+					#signupPassword="ngModel"
+				/>
+			<label htmlFor="name">Name</label>
+			<input
+				type="text"
+				id="name"
+				class="signup__name"
+				name = "signupName"
+				[(ngModel)]="signup.name"
+			/>
+			<label htmlFor="jobTitle">Job Title</label>
+			<input
+				type="text"
+				id="jobTitle"
+				class="signup__job-title"
+				name = "signupJobTitle"
+				[(ngModel)]="signup.jobTitle"
+			/>
+			<label htmlFor="signupBio">Bio</label>
+			<textarea
+				name="signupBio"
+				id="bio"
+				cols="30"
+				rows="10"
+				class="submit_bio"
+				[(ngModel)]="signup.bio"
+			></textarea> 
+			<button type="submit" class="signup__button">
+				Submit
+			</button>
+			<app-error-msg [msg]="error.msg"  *ngFor="let error of errors"/>
+  </form>
 </div>
