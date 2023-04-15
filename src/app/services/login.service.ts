@@ -27,7 +27,7 @@ export class LoginService {
         name: '',
         jobTitle: '',
         bio: '',
-      },
+      } as User,
       token: '',
       msg: '',
     };
@@ -83,5 +83,12 @@ export class LoginService {
     this.loginState.success = false;
     this.resetPassword();
     localStorage.removeItem('loginState');
+  }
+
+  createUser(user: User) {
+    return this.http.post<{ success: boolean; errors: { msg: string }[] }>(
+      'https://radiant-crag-39178.herokuapp.com/users/login',
+      user
+    );
   }
 }
