@@ -11,7 +11,7 @@ import { LoginService } from 'src/app/services/login.service';
 export class SignupComponent implements OnInit {
   constructor(private loginService: LoginService, private router: Router) {}
   loginSuccess = this.loginService.state.success;
-  errors: { msg: string }[] = [];
+  errors!: { msg: string }[];
   signup = {
     username: '',
     password: '',
@@ -19,18 +19,27 @@ export class SignupComponent implements OnInit {
     jobTitle: '',
     bio: '',
   } as User;
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.errors = [];
+  }
 
   onSubmit(signupForm: { valid: any }) {
     if (signupForm.valid) {
       this.errors = [];
-      console.log('Form valid!', this.signup);
-      this.loginService.createUser(this.signup).subscribe(() => {
-        this.router.navigateByUrl('/login');
+      this.loginService.createUser(this.signup).subscribe({
+        next: () => {
+          this.router.navigateByUrl('/login');
+        },
+        error: (err) => {
+          const error = err.error;
+          if (err.status === 0) this.errors = [{ msg: error.message }];
+          if (err.status === 401) this.errors = [{ msg: error.msg }];
+          if (err.status !== 0 && err.status !== 401)
+            this.errors = error.errors;
+        },
       });
     } else {
-      this.errors.push({ msg: 'Form Invalid!' });
-      console.log('Form Invalid!');
+      this.errors.push({ msg: 'Username and Password are required!' });
     }
   }
 }
