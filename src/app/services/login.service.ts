@@ -91,4 +91,14 @@ export class LoginService {
       user
     );
   }
+
+  updateUser(user: User, token: string) {
+    return this.http.put<{ success: boolean; errors: { msg: string }[] }>(
+      `https://radiant-crag-39178.herokuapp.com/users/${user._id}`,
+      user,
+      {
+        headers: { ['Authorization']: token },
+      }
+    );
+  }
 }
