@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { LoginService } from 'src/app/services/login.service';
 
 @Component({
   selector: 'app-nav',
@@ -7,4 +8,5 @@ import { Component } from '@angular/core';
 })
 export class NavComponent {
   logo = 'Alex73 DEV';
+  @Input() loginSuccess!: boolean;
 }

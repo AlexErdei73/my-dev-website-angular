@@ -1,10 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Login } from 'src/app/model/login';
 import { Post } from 'src/app/model/post';
 import { User } from 'src/app/model/user';
 import { LoginService } from 'src/app/services/login.service';
 import { PostsService } from 'src/app/services/posts.service';
 
-interface Login {
+interface LoginForm {
   name: string;
   password: string;
 }
@@ -15,11 +16,12 @@ interface Login {
   styleUrls: ['./login.component.less'],
 })
 export class LoginComponent implements OnInit {
-  login: Login = {
+  login: LoginForm = {
     name: this._loginState.state.user.username,
     password: this._loginState.state.password,
   };
   posts: Post[] = [];
+  @Output() private logout = new EventEmitter<Login>();
   constructor(
     public _loginState: LoginService,
     public postsService: PostsService
@@ -53,7 +55,7 @@ export class LoginComponent implements OnInit {
     );
   }
 
-  logout() {
+  onLogout() {
     this._loginState.logout();
     this.login.password = '';
     this.login.name = '';

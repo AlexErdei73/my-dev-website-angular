@@ -1,6 +1,9 @@
 @import "../../app.component.less";
 @import "../nav/nav.component.less";
 
+@padding: 5rem;
+@author-bg-color: lightgray;
+
 .post {
   .app-margin();
   padding-top: 0;
@@ -11,4 +14,13 @@
   article {
     max-width: 100%;
   }
+}
+
+.author {
+  flex: 1 1 0;
+  width: 100%;
+  max-width: 100%;
+  padding: @padding;
+  background-color: @author-bg-color;
+  align-self: stretch;
 }
