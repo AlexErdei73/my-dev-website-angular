@@ -10,7 +10,7 @@
         <button type="button" class="card-body__button" (click)="onClickView(post)">
           View
         </button>
-        <button *ngIf="!edit && user && user._id" class="card-body__button" (click)="onClickLike(post)">
+        <button *ngIf="!edit && loginService.state.success" class="card-body__button" (click)="onClickLike(post)">
           {{isPostLiked(post) ? "Unlike" : "Like"}}
         </button>
         <button *ngIf="edit" class="card-body__button" (click)="onClickPublish(post)">
