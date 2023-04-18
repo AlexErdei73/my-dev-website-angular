@@ -5,34 +5,36 @@ import { User } from 'src/app/model/user';
 import { LoginService } from 'src/app/services/login.service';
 import { PostsService } from 'src/app/services/posts.service';
 
-interface LoginForm {
-  name: string;
-  password: string;
-}
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.less'],
 })
 export class LoginComponent implements OnInit {
-  login: LoginForm = {
-    name: this._loginState.state.user.username,
-    password: this._loginState.state.password,
-  };
   posts: Post[] = [];
-  @Output() private logout = new EventEmitter<Login>();
+  loginState!: Login;
+  login = {
+    name: '',
+    password: '',
+  };
   constructor(
-    public _loginState: LoginService,
-    public postsService: PostsService
+    private loginService: LoginService,
+    private postsService: PostsService
   ) {}
   ngOnInit(): void {
+    this.loginState = this.loginService.state;
+    this.login.name = this.loginState.user.username;
+    this.login.password = this.loginState.password;
     this.postsService.posts.subscribe((posts) => (this.posts = posts));
   }
 
   private setLoginMsg(msg: string) {
-    this._loginState.state.msg = msg;
+    this.loginState.msg = msg;
   }
+
+  setLoginState = (loginState: Login) => {
+    this.loginState = loginState;
+  };
 
   onSubmit(loginForm: { valid: any }) {
     let msg;
@@ -42,21 +44,20 @@ export class LoginComponent implements OnInit {
     }
     if (loginForm.valid) {
       this.setLoginMsg('');
-      this._loginState.state.user.username = this.login.name;
-      this._loginState.state.password = this.login.password;
-      this._loginState.login();
+      this.loginService.state.user.username = this.login.name;
+      this.loginService.state.password = this.login.password;
+      this.loginService.login(this.setLoginState);
     }
   }
 
   userPosts() {
     return this.posts.filter(
-      (post) =>
-        (post.author as any as User)._id === this._loginState.state.user._id
+      (post) => (post.author as User)._id === this.loginState.user._id
     );
   }
 
   onLogout() {
-    this._loginState.logout();
+    this.loginService.logout();
     this.login.password = '';
     this.login.name = '';
   }

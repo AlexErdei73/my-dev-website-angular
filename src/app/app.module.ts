@@ -23,6 +23,7 @@ import { ErrorDlgComponent } from './components/error-dlg/error-dlg.component';
 import { PostTitleComponent } from './components/post-title/post-title.component';
 import { EditBlockComponent } from './components/edit-block/edit-block.component';
 import { AuthorComponent } from './components/author/author.component';
+import { PostRouteComponent } from './components/post-route/post-route.component';
 
 @NgModule({
   declarations: [
@@ -43,6 +44,7 @@ import { AuthorComponent } from './components/author/author.component';
     PostTitleComponent,
     EditBlockComponent,
     AuthorComponent,
+    PostRouteComponent,
   ],
   imports: [
     BrowserModule,

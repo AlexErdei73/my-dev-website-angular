@@ -9,16 +9,18 @@ import { PostsService } from 'src/app/services/posts.service';
   styleUrls: ['./post.component.less'],
 })
 export class PostComponent implements OnInit {
-  @Input() post = this.postsService.currentPost;
-  @Input() edit = this.postsService.edit;
-  newBlock: Block = {
-    _id: '',
-    post: (this.post as Post)._id,
-    type: 'paragraph',
-    text: 'New Block',
-    language: ' ',
-    links: [],
-  };
-  constructor(private postsService: PostsService) {}
-  ngOnInit(): void {}
+  @Input() post!: Post;
+  @Input() edit!: boolean;
+  newBlock!: Block;
+  constructor(public postsService: PostsService) {}
+  ngOnInit(): void {
+    this.newBlock = {
+      _id: '',
+      post: this.postsService.currentPost._id,
+      type: 'paragraph',
+      text: 'New Block',
+      language: ' ',
+      links: [],
+    };
+  }
 }

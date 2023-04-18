@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { CardComponent } from './card.component';
+import { Variant } from './card';
 
 describe('CardComponent', () => {
   let component: CardComponent;
@@ -8,12 +9,18 @@ describe('CardComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ CardComponent ]
-    })
-    .compileComponents();
+      declarations: [CardComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(CardComponent);
     component = fixture.componentInstance;
+    component.card = {
+      variant: Variant.normal,
+      headerTextLeft: 'Test Header',
+      headerTextRight: '',
+      footerTextLeft: 'Test Footer',
+      footerTextRight: '',
+    };
     fixture.detectChanges();
   });
 

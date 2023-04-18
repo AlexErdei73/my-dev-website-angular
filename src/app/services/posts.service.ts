@@ -10,15 +10,49 @@ import { Block } from '../model/block';
 })
 export class PostsService {
   private _posts!: Observable<Post[]>;
-  private _currentPost: Post | undefined;
+  private _currentPost!: Post;
   private _edit = false;
   private _errors: { msg: string }[] = [];
   private _success = false;
+  private _aboutPost!: Post;
+  private _ABOUT_POST = '64347b31a310964c06459b3b';
+  private _EMPTY_AUTHOR: User = {
+    _id: '',
+    username: '...Loading',
+    password: '',
+    hash: '',
+    isAdmin: false,
+    jobTitle: '',
+    bio: '',
+    name: '',
+  };
+  private _EMPTY_POST: Post = {
+    _id: '',
+    author: this._EMPTY_AUTHOR,
+    title: '...Loading',
+    content: [],
+    comments: [],
+    likes: [],
+    published: false,
+    createdAt: '',
+    updatedAt: '',
+  };
   showErrorDlg = false;
 
   constructor(private http: HttpClient) {
     this.fetchPosts();
-    this._posts.subscribe((posts) => (this._currentPost = posts[0]));
+    this._currentPost = this._EMPTY_POST;
+    this._aboutPost = this._EMPTY_POST;
+    this._posts.subscribe({
+      next: (posts) => {
+        const aboutPost = posts.find((post) => post._id === this._ABOUT_POST);
+        if (aboutPost) this._aboutPost = aboutPost;
+        if (posts.length > 0) this._currentPost = posts[0];
+      },
+      error: (err) => {
+        console.error(err.error);
+      },
+    });
   }
 
   fetchPosts() {
@@ -33,11 +67,11 @@ export class PostsService {
     return this._posts;
   }
 
-  set currentPost(post: Post | undefined) {
+  set currentPost(post: Post) {
     this._currentPost = post;
   }
 
-  get currentPost(): Post | undefined {
+  get currentPost(): Post {
     return this._currentPost;
   }
 
@@ -63,6 +97,10 @@ export class PostsService {
 
   set edit(edit: boolean) {
     this._edit = edit;
+  }
+
+  get aboutPost() {
+    return this._aboutPost;
   }
 
   deleteResponse() {

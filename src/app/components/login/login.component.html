@@ -1,4 +1,4 @@
-<form *ngIf="!_loginState.state.success" class="login" (ngSubmit)="onSubmit(loginForm)" #loginForm="ngForm">
+<form *ngIf="!loginState.success" class="login" (ngSubmit)="onSubmit(loginForm)" #loginForm="ngForm">
   <h1 class="login__title">Login</h1>
 
   <label htmlFor="username">Username*</label>
@@ -8,13 +8,13 @@
   <button type="submit" class="login__button">
     Login
   </button>
-  <app-error-msg *ngIf="_loginState.state.msg" [msg]="_loginState.state.msg"></app-error-msg>
+  <app-error-msg *ngIf="loginState.msg" [msg]="loginState.msg"></app-error-msg>
 </form>
-<div *ngIf="_loginState.state.success" class="logout">
-  <h1 class="logout__title">Welcome {{_loginState.state.user.username}}!</h1>
+<div *ngIf="loginState.success" class="logout">
+  <h1 class="logout__title">Welcome {{loginState.user.username}}!</h1>
   <app-posts [posts]="userPosts()" [edit]="true"></app-posts>
 
-  <a href="/new-post" class="logout__button--link">
+  <a routerLink="/new-post" class="logout__button--link">
     New Post
   </a>
 

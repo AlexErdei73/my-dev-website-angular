@@ -46,7 +46,7 @@ export class LoginService {
     this.loginState = loginState;
   }
 
-  login() {
+  login(setLoginstate: any) {
     const uname = this.loginState.user.username;
     const pwd = this.loginState.password;
     this.http
@@ -65,10 +65,13 @@ export class LoginService {
             this.resetPassword(); //Do not store password as it is sensitive information!!!
             //Store newLoginState, which contains the token, in localStorage
             localStorage.setItem('loginState', JSON.stringify(this.loginState));
+            setLoginstate(this.loginState);
           }
         },
         error: (err) => {
           this.loginState.msg = err.error.msg ? err.error.msg : err.message;
+          this.loginState.success = false;
+          setLoginstate(this.loginState);
         },
       });
   }
