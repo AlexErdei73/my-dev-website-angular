@@ -10,8 +10,8 @@ import { PostsService } from 'src/app/services/posts.service';
 })
 export class AboutComponent implements OnInit {
   aboutPost!: Post;
-  constructor(private postService: PostsService, private router: Router) {}
+  constructor(private postsService: PostsService, private router: Router) {}
   ngOnInit(): void {
-    this.aboutPost = this.postService.aboutPost;
+    this.aboutPost = this.postsService.aboutPost;
   }
 }

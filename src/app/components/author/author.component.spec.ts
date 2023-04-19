@@ -1,4 +1,7 @@
+import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { LoginComponent } from '../login/login.component';
+import { PostsComponent } from '../posts/posts.component';
 
 import { AuthorComponent } from './author.component';
 
@@ -8,9 +11,10 @@ describe('AuthorComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ AuthorComponent ]
-    })
-    .compileComponents();
+      declarations: [AuthorComponent],
+      imports: [HttpClientModule],
+      providers: [LoginComponent, PostsComponent],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(AuthorComponent);
     component = fixture.componentInstance;
