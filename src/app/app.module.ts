@@ -24,6 +24,8 @@ import { PostTitleComponent } from './components/post-title/post-title.component
 import { EditBlockComponent } from './components/edit-block/edit-block.component';
 import { AuthorComponent } from './components/author/author.component';
 import { PostRouteComponent } from './components/post-route/post-route.component';
+import { LoginService } from './services/login.service';
+import { ErrorHandlingService } from './services/error-handling.service';
 
 @NgModule({
   declarations: [
@@ -53,7 +55,7 @@ import { PostRouteComponent } from './components/post-route/post-route.component
     HighlightJsModule,
     FormsModule,
   ],
-  providers: [PostsService],
+  providers: [PostsService, LoginService, ErrorHandlingService],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

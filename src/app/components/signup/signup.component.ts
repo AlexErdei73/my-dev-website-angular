@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { User } from 'src/app/model/user';
+import { ErrorHandlingService } from 'src/app/services/error-handling.service';
 import { LoginService } from 'src/app/services/login.service';
 
 @Component({
@@ -9,7 +10,11 @@ import { LoginService } from 'src/app/services/login.service';
   styleUrls: ['./signup.component.less'],
 })
 export class SignupComponent implements OnInit {
-  constructor(private loginService: LoginService, private router: Router) {}
+  constructor(
+    private loginService: LoginService,
+    private router: Router,
+    private errorHandling: ErrorHandlingService
+  ) {}
   loginSuccess = this.loginService.state.success;
   errors!: { msg: string }[];
   signup = this.loginSuccess
@@ -25,13 +30,6 @@ export class SignupComponent implements OnInit {
     this.errors = [];
   }
 
-  private handleError(err: any) {
-    const error = err.error;
-    if (err.status === 0) this.errors = [{ msg: error.message }];
-    if (err.status === 401) this.errors = [{ msg: error.msg }];
-    if (err.status !== 0 && err.status !== 401) this.errors = error.errors;
-  }
-
   onSubmit(signupForm: { valid: any }) {
     if (signupForm.valid) {
       this.errors = [];
@@ -40,7 +38,8 @@ export class SignupComponent implements OnInit {
           next: () => {
             this.router.navigateByUrl('/login');
           },
-          error: (err) => this.handleError(err),
+          error: (err) =>
+            this.errors.push(this.errorHandling.handleErrors(err)[0]),
         });
       if (this.loginSuccess)
         this.loginService
@@ -49,7 +48,8 @@ export class SignupComponent implements OnInit {
             next: () => {
               this.router.navigateByUrl('/login');
             },
-            error: (err) => this.handleError(err),
+            error: (err) =>
+              this.errors.push(this.errorHandling.handleErrors(err)[0]),
           });
     } else {
       this.errors.push({ msg: 'Username and Password are required!' });
