@@ -44,7 +44,9 @@ export class NewPostComponent implements OnInit {
             });
           },
           error: (err) => {
-            const message = err.error ? err.error : err.message;
+            let message = '';
+            message = err.error ? err.error : err.message;
+            if (err.status === 0) message = err.message;
             this.postsService.errors = [{ msg: message }];
             this.newPost.msg = message;
             console.error(message);

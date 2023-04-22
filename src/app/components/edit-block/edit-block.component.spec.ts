@@ -1,4 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
+import { ErrorMsgComponent } from '../error-msg/error-msg.component';
 
 import { EditBlockComponent } from './edit-block.component';
 
@@ -8,12 +10,21 @@ describe('EditBlockComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ EditBlockComponent ]
-    })
-    .compileComponents();
+      declarations: [EditBlockComponent, ErrorMsgComponent],
+      imports: [FormsModule],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(EditBlockComponent);
     component = fixture.componentInstance;
+    component.block = {
+      _id: '',
+      type: 'paragraph',
+      language: '',
+      links: [],
+      text: 'Test Block Paragraph',
+      post: '',
+    };
+    component.errors = [];
     fixture.detectChanges();
   });
 
