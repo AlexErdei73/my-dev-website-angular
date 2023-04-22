@@ -60,5 +60,6 @@ export class LoginComponent implements OnInit {
     this.loginService.logout();
     this.login.password = '';
     this.login.name = '';
+    this.postsService.edit = false;
   }
 }
