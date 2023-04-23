@@ -4,6 +4,7 @@ import { Post } from '../model/post';
 import { map, Observable, of } from 'rxjs';
 import { User } from '../model/user';
 import { Block } from '../model/block';
+import { ErrorHandlingService } from './error-handling.service';
 
 @Injectable({
   providedIn: 'root',
@@ -39,7 +40,10 @@ export class PostsService {
   };
   showErrorDlg = false;
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private errorHandling: ErrorHandlingService
+  ) {
     this.fetchPosts();
     this._currentPost = this._EMPTY_POST;
     this._aboutPost = this._EMPTY_POST;
@@ -108,13 +112,11 @@ export class PostsService {
     this._errors = [];
   }
 
-  private handleErrorCallBack(err: any) {
-    const message =
-      err.error && typeof err.error === 'string' ? err.error : err.message;
-    this._errors = [{ msg: message }];
+  private handleErrorCallBack = (errors: { msg: string }[]) => {
+    this._errors = errors;
     this.showErrorDlg = true;
-    console.error(message);
-  }
+    console.error(errors[0].msg);
+  };
 
   toggleLike(post: Post, user: User) {
     this.http
@@ -129,7 +131,8 @@ export class PostsService {
             ? post.likes.push(user._id)
             : post.likes.splice(index, 1);
         },
-        error: (err) => this.handleErrorCallBack(err),
+        error: (err) =>
+          this.errorHandling.handleErrors(err, this.handleErrorCallBack),
       });
   }
 
@@ -147,7 +150,8 @@ export class PostsService {
         next: () => {
           post.published = !post.published;
         },
-        error: (err) => this.handleErrorCallBack(err),
+        error: (err) =>
+          this.errorHandling.handleErrors(err, this.handleErrorCallBack),
       });
   }
 
