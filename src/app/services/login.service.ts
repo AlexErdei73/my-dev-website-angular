@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Login } from '../model/login';
 import { User } from '../model/user';
+import { ErrorHandlingService } from './error-handling.service';
 
 interface LoginResponse {
   success: boolean;
@@ -15,7 +16,11 @@ interface LoginResponse {
 })
 export class LoginService {
   private loginState!: Login;
-  constructor(private http: HttpClient) {
+  private setLoginState: any;
+  constructor(
+    private http: HttpClient,
+    private errorHandlingService: ErrorHandlingService
+  ) {
     this.loginState = {
       success: false,
       password: '',
@@ -46,6 +51,12 @@ export class LoginService {
     this.loginState = loginState;
   }
 
+  private handleErrorCallBack = (errors: { msg: string }[]) => {
+    this.loginState.msg = errors[0].msg;
+    this.loginState.success = false;
+    this.setLoginState(this.loginState);
+  };
+
   login(setLoginstate: any) {
     const uname = this.loginState.user.username;
     const pwd = this.loginState.password;
@@ -69,9 +80,8 @@ export class LoginService {
           }
         },
         error: (err) => {
-          this.loginState.msg = err.error.msg ? err.error.msg : err.message;
-          this.loginState.success = false;
-          setLoginstate(this.loginState);
+          this.setLoginState = setLoginstate;
+          this.errorHandlingService.handleErrors(err, this.handleErrorCallBack);
         },
       });
   }
