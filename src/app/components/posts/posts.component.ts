@@ -5,6 +5,7 @@ import { User } from 'src/app/model/user';
 import { LoginService } from 'src/app/services/login.service';
 import { PostsService } from 'src/app/services/posts.service';
 import { Variant } from '../card/card';
+import { ErrorHandlingService } from 'src/app/services/error-handling.service';
 
 @Component({
   selector: 'app-posts',
@@ -21,7 +22,8 @@ export class PostsComponent implements OnInit {
   constructor(
     public postsService: PostsService,
     private router: Router,
-    public loginService: LoginService
+    public loginService: LoginService,
+    private errorHandlingService: ErrorHandlingService
   ) {}
 
   ngOnInit(): void {
@@ -77,10 +79,8 @@ export class PostsComponent implements OnInit {
         });
       },
       error: (err) => {
-        const message =
-          err.error && typeof err.error === 'string' ? err.error : err.message;
-        this.postsService.errors = [{ msg: message }];
-        console.error(message);
+        this.postsService.errors = this.errorHandlingService.handleErrors(err);
+        console.error(this.postsService.errors[0].msg);
       },
     });
   }
