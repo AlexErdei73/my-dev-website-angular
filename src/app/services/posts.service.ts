@@ -54,7 +54,7 @@ export class PostsService {
         if (posts.length > 0) this._currentPost = posts[0];
       },
       error: (err) => {
-        console.error(err.error);
+        this.errorHandling.handleErrors(err, this.handleErrorCallBack);
       },
     });
   }
