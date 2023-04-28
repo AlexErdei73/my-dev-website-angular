@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { Block } from 'src/app/model/block';
 import { Link } from 'src/app/model/link';
+import { ErrorHandlingService } from 'src/app/services/error-handling.service';
 import { LoginService } from 'src/app/services/login.service';
 import { PostsService } from 'src/app/services/posts.service';
 
@@ -16,7 +17,8 @@ export class BlockComponent {
   errors: { msg: string }[] = [];
   constructor(
     private postsService: PostsService,
-    private loginService: LoginService
+    private loginService: LoginService,
+    private errorHandlingService: ErrorHandlingService
   ) {}
 
   private addLinks(text: string, links: Link[]) {
@@ -60,9 +62,7 @@ export class BlockComponent {
           this.postsService.currentPost!.content.splice(index, 1);
         },
         error: (err) => {
-          this.errors = [{ msg: err.message }];
-          if (err.error.errors) this.errors = err.error.errors;
-          if (typeof err.error === 'string') this.errors = [{ msg: err.error }];
+          this.errors = this.errorHandlingService.handleErrors(err);
           //We show error messages in the edit-block component
           this.setEditing(true);
         },
@@ -79,9 +79,7 @@ export class BlockComponent {
           this.onCancel(block);
         },
         error: (err) => {
-          this.errors = [{ msg: err.message }];
-          if (err.error.errors) this.errors = err.error.errors;
-          if (typeof err.error === 'string') this.errors = [{ msg: err.error }];
+          this.errors = this.errorHandlingService.handleErrors(err);
           this.block = block;
         },
       });
@@ -100,9 +98,7 @@ export class BlockComponent {
           this.onCancel(block);
         },
         error: (err): void => {
-          this.errors = [{ msg: err.message }];
-          if (err.error.errors) this.errors = err.error.errors;
-          if (typeof err.error === 'string') this.errors = [{ msg: err.error }];
+          this.errors = this.errorHandlingService.handleErrors(err);
           this.block = block;
         },
       });
