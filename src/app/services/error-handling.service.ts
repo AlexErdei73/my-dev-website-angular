@@ -13,7 +13,7 @@ export class ErrorHandlingService {
     let errors: { msg: string }[] = [];
     const error = err.error;
     if (err.status === 0) errors = [{ msg: err.message }];
-    if (err.status === 401) errors = [{ msg: error.msg }];
+    if (err.status === 401) errors = [{ msg: error }];
     if (err.status !== 0 && err.status !== 401) errors = error.errors;
     if (done) done(errors);
     return errors;
