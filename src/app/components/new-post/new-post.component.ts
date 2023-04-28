@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { LoginService } from 'src/app/services/login.service';
 import { PostsService } from 'src/app/services/posts.service';
 import { Router } from '@angular/router';
+import { ErrorHandlingService } from 'src/app/services/error-handling.service';
 
 interface NewPost {
   title: string;
@@ -20,6 +21,7 @@ export class NewPostComponent implements OnInit {
   constructor(
     private loginService: LoginService,
     private postsService: PostsService,
+    private errorHandlingService: ErrorHandlingService,
     private router: Router
   ) {}
   ngOnInit() {
@@ -44,12 +46,10 @@ export class NewPostComponent implements OnInit {
             });
           },
           error: (err) => {
-            let message = '';
-            message = err.error ? err.error : err.message;
-            if (err.status === 0) message = err.message;
-            this.postsService.errors = [{ msg: message }];
-            this.newPost.msg = message;
-            console.error(message);
+            this.postsService.errors =
+              this.errorHandlingService.handleErrors(err);
+            this.newPost.msg = this.postsService.errors[0].msg;
+            console.error(this.newPost.msg);
           },
         });
     } else {

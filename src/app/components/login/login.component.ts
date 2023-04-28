@@ -1,4 +1,4 @@
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Login } from 'src/app/model/login';
 import { Post } from 'src/app/model/post';
 import { User } from 'src/app/model/user';
