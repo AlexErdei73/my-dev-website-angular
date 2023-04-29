@@ -75,6 +75,7 @@ export class PostsComponent implements OnInit {
         this.postsService.posts.subscribe((posts) => {
           this.postsService.success = true;
           this.posts = posts;
+          this.postsService.currentPost = posts[0];
           this.onClickModalCancel();
         });
       },
