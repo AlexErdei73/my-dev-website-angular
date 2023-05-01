@@ -44,9 +44,9 @@ export class PostsService {
     private http: HttpClient,
     private errorHandling: ErrorHandlingService
   ) {
-    this.fetchPosts();
     this._currentPost = this._EMPTY_POST;
     this._aboutPost = this._EMPTY_POST;
+    this.fetchPosts();
     this._posts.subscribe({
       next: (posts) => {
         const aboutPost = posts.find((post) => post._id === this._ABOUT_POST);
