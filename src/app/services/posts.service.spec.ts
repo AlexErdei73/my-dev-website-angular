@@ -10,6 +10,7 @@ import {
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { User } from '../model/user';
 import { Post } from '../model/post';
+import { Block } from '../model/block';
 
 describe('PostsService', () => {
   let service: PostsService;
@@ -20,6 +21,7 @@ describe('PostsService', () => {
   let testAboutPost: Post;
   let newPost: Post;
   let testPosts: Post[];
+  let testBlock: Block;
   let baseUrl = 'https://radiant-crag-39178.herokuapp.com';
 
   beforeEach(() => {
@@ -73,6 +75,14 @@ describe('PostsService', () => {
       published: false,
       createdAt: '29/04/2023',
       updatedAt: '30/04/2023',
+    };
+    testBlock = {
+      _id: '645d140abfc2a1029df283f1',
+      post: testPost._id,
+      type: 'paragraph',
+      text: 'test block text',
+      language: ' ',
+      links: [],
     };
     testPosts = [testPost, testAboutPost];
   });
@@ -223,5 +233,154 @@ describe('PostsService', () => {
     const req = httpTestingController.expectOne(`${baseUrl}/posts`);
     expect(req.request.method).toBe('GET');
     req.flush({ success: true, posts: testPosts, errors: [] });
+  });
+
+  it('should add like of user to post', () => {
+    const newTestPost = { ...testPost };
+    newTestPost.likes.push(testUser._id);
+
+    service.toggleLike(testPost, testUser);
+    expect(testPost).toEqual(newTestPost);
+
+    const reqPUT = httpTestingController.expectOne(
+      `${baseUrl}/posts/${testPost._id}/likes`
+    );
+    expect(reqPUT.request.method).toBe('PUT');
+    expect(reqPUT.request.body).toEqual({ user: testUser._id });
+    reqPUT.flush({ success: true, posts: testPosts, errors: [] });
+
+    const req = httpTestingController.expectOne(`${baseUrl}/posts`);
+    expect(req.request.method).toBe('GET');
+    req.flush({ success: true, posts: testPosts, errors: [] });
+  });
+
+  it('should remove like of user from post', () => {
+    const newTestPost = { ...testPost };
+    testPost.likes.push(testUser._id);
+
+    service.toggleLike(testPost, testUser);
+    expect(testPost).toEqual(newTestPost);
+
+    const reqPUT = httpTestingController.expectOne(
+      `${baseUrl}/posts/${testPost._id}/likes`
+    );
+    expect(reqPUT.request.method).toBe('PUT');
+    expect(reqPUT.request.body).toEqual({ user: testUser._id });
+    reqPUT.flush({ success: true, posts: testPosts, errors: [] });
+
+    const req = httpTestingController.expectOne(`${baseUrl}/posts`);
+    expect(req.request.method).toBe('GET');
+    req.flush({ success: true, posts: testPosts, errors: [] });
+  });
+
+  it('should save block', () => {
+    const res = service.saveBlock(testBlock, 'empty token');
+    res.subscribe((res) => {
+      expect(res).toEqual({
+        success: true,
+        block: testBlock,
+        errors: [],
+      });
+    });
+
+    const reqPOST = httpTestingController.expectOne(
+      `${baseUrl}/posts/${testPost._id}/blocks`
+    );
+    expect(reqPOST.request.method).toBe('POST');
+    expect(reqPOST.request.body).toEqual(testBlock);
+    reqPOST.flush({ success: true, block: testBlock, errors: [] });
+
+    const req = httpTestingController.expectOne(`${baseUrl}/posts`);
+    expect(req.request.method).toBe('GET');
+    req.flush({ success: true, posts: testPosts, errors: [] });
+  });
+
+  it('should delete block', () => {
+    const res = service.deleteBlock(testBlock, 'empty token');
+    res.subscribe((res) => {
+      expect(res).toEqual({
+        success: true,
+        block: testBlock,
+        errors: [],
+      });
+    });
+
+    const reqDELETE = httpTestingController.expectOne(
+      `${baseUrl}/posts/${testPost._id}/blocks/${testBlock._id}`
+    );
+    expect(reqDELETE.request.method).toBe('DELETE');
+    reqDELETE.flush({ success: true, block: testBlock, errors: [] });
+
+    const req = httpTestingController.expectOne(`${baseUrl}/posts`);
+    expect(req.request.method).toBe('GET');
+    req.flush({ success: true, posts: testPosts, errors: [] });
+  });
+
+  it('should update block', () => {
+    const updatedBlock = { ...testBlock };
+    updatedBlock.text = 'updated text';
+
+    const res = service.updateBlock(updatedBlock, 'empty token');
+    res.subscribe((res) => {
+      expect(res).toEqual({
+        success: true,
+        block: testBlock,
+        errors: [],
+      });
+    });
+
+    const reqPUT = httpTestingController.expectOne(
+      `${baseUrl}/posts/${testPost._id}/blocks/${testBlock._id}`
+    );
+    expect(reqPUT.request.method).toBe('PUT');
+    expect(reqPUT.request.body).toEqual(updatedBlock);
+    reqPUT.flush({ success: true, block: testBlock, errors: [] });
+
+    const req = httpTestingController.expectOne(`${baseUrl}/posts`);
+    expect(req.request.method).toBe('GET');
+    req.flush({ success: true, posts: testPosts, errors: [] });
+  });
+
+  it('should handle http error at loading', () => {
+    const emptyUser: User = {
+      _id: '',
+      username: '...Loading',
+      password: '',
+      hash: '',
+      isAdmin: false,
+      name: '',
+      jobTitle: '',
+      bio: '',
+    };
+    const emptyPost: Post = {
+      _id: '',
+      author: emptyUser,
+      title: '...Loading',
+      content: [],
+      comments: [],
+      likes: [],
+      published: false,
+      createdAt: '',
+      updatedAt: '',
+    };
+
+    const mockError = new ProgressEvent('error');
+
+    service.posts.subscribe({
+      next: (posts) => {
+        expect(posts).toEqual([emptyPost]);
+      },
+      error: (err) => {
+        expect(err.error).toBe(mockError);
+      },
+    });
+
+    const requests = httpTestingController.match(`${baseUrl}/posts`);
+    expect(requests.length).toBe(2);
+    expect(requests[0].request.method).toBe('GET');
+    expect(requests[1].request.method).toBe('GET');
+
+    requests[0].error(mockError);
+    requests[1].error(mockError);
   });
 });
