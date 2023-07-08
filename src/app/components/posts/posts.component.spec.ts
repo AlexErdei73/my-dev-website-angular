@@ -1,17 +1,15 @@
-import { HttpClientModule } from '@angular/common/http';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Router } from '@angular/router';
 import { LoginService } from 'src/app/services/login.service';
 import { PostsService } from 'src/app/services/posts.service';
 import { CardComponent } from '../card/card.component';
-import { ErrorDlgComponent } from '../error-dlg/error-dlg.component';
-import { ModalComponent } from '../modal/modal.component';
-
 import { PostsComponent } from './posts.component';
 import { Post } from 'src/app/model/post';
 import { User } from 'src/app/model/user';
 import { Variant } from '../card/card';
 import { Login } from 'src/app/model/login';
+import { of } from 'rxjs';
+import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
 let testUser: User;
 let _posts: Post[];
 let loginState: Login;
@@ -60,28 +58,32 @@ loginState = {
   msg: '',
 };
 
+@Component({ selector: 'app-modal', template: '' })
+class ModalStubComponent {}
+
 describe('PostsComponent', () => {
   let component: PostsComponent;
   let fixture: ComponentFixture<PostsComponent>;
 
-  const loginService = jasmine.createSpyObj('LoginService', [], {
-    state: loginState,
-  });
-
   beforeEach(async () => {
+    const loginService = jasmine.createSpyObj('LoginService', [], {
+      state: loginState,
+    });
+
+    const postsService = jasmine.createSpyObj(
+      'PostsService',
+      ['toggleLike', 'togglePublish', 'deletePost', 'removePost'],
+      { posts: of(_posts), errors: [] }
+    );
+
     await TestBed.configureTestingModule({
-      declarations: [
-        PostsComponent,
-        CardComponent,
-        ModalComponent,
-        ErrorDlgComponent,
-      ],
-      imports: [HttpClientModule],
+      declarations: [PostsComponent, CardComponent, ModalStubComponent],
       providers: [
-        PostsService,
+        { provide: PostsService, useValue: postsService },
         { provide: LoginService, useValue: loginService },
         Router,
       ],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
     fixture = TestBed.createComponent(PostsComponent);
