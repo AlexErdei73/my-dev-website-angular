@@ -11,8 +11,10 @@ import { PostsComponent } from './posts.component';
 import { Post } from 'src/app/model/post';
 import { User } from 'src/app/model/user';
 import { Variant } from '../card/card';
-let testUser;
+import { Login } from 'src/app/model/login';
+let testUser: User;
 let _posts: Post[];
+let loginState: Login;
 
 testUser = {
   _id: '63ab6c333bbf8653df7e1175',
@@ -50,9 +52,21 @@ _posts = [
   },
 ];
 
+loginState = {
+  success: false,
+  password: '',
+  user: testUser,
+  token: '',
+  msg: '',
+};
+
 describe('PostsComponent', () => {
   let component: PostsComponent;
   let fixture: ComponentFixture<PostsComponent>;
+
+  const loginService = jasmine.createSpyObj('LoginService', [], {
+    state: loginState,
+  });
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
@@ -63,7 +77,11 @@ describe('PostsComponent', () => {
         ErrorDlgComponent,
       ],
       imports: [HttpClientModule],
-      providers: [PostsService, LoginService, Router],
+      providers: [
+        PostsService,
+        { provide: LoginService, useValue: loginService },
+        Router,
+      ],
     }).compileComponents();
 
     fixture = TestBed.createComponent(PostsComponent);
