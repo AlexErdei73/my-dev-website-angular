@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { Router } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { LoginService } from 'src/app/services/login.service';
 import { PostsService } from 'src/app/services/posts.service';
 import { CardComponent } from '../card/card.component';
@@ -65,23 +65,23 @@ describe('PostsComponent', () => {
   let component: PostsComponent;
   let fixture: ComponentFixture<PostsComponent>;
 
-  beforeEach(async () => {
+  const postsService = jasmine.createSpyObj(
+    'PostsService',
+    ['toggleLike', 'togglePublish', 'deletePost', 'removePost'],
+    { posts: of(_posts), errors: [], currentPost: _posts[0] }
+  );
+
+  beforeEach(() => {
     const loginService = jasmine.createSpyObj('LoginService', [], {
       state: loginState,
     });
 
-    const postsService = jasmine.createSpyObj(
-      'PostsService',
-      ['toggleLike', 'togglePublish', 'deletePost', 'removePost'],
-      { posts: of(_posts), errors: [] }
-    );
-
-    await TestBed.configureTestingModule({
+    TestBed.configureTestingModule({
       declarations: [PostsComponent, CardComponent, ModalStubComponent],
       providers: [
         { provide: PostsService, useValue: postsService },
         { provide: LoginService, useValue: loginService },
-        Router,
+        provideRouter([{ path: '**', component: PostsComponent }]),
       ],
       schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
@@ -111,6 +111,16 @@ describe('PostsComponent', () => {
     btnElements.forEach((element: HTMLElement, index: number) => {
       expect(element.textContent).toContain('View');
     });
+  });
+
+  it('should route to the right post when View button clicked', async () => {
+    const postIndex = 0;
+    const btnElements = fixture.nativeElement.querySelectorAll('button');
+    await btnElements[postIndex].click();
+    expect(
+      Object.getOwnPropertyDescriptor(postsService, 'currentPost')?.set
+    ).toHaveBeenCalledWith(_posts[postIndex]);
+    expect(TestBed.inject(Router).url).toEqual('/post');
   });
 
   it('should have getPostCard function to get input object for PostCard component', () => {
