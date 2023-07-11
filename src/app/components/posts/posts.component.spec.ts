@@ -71,11 +71,11 @@ describe('PostsComponent', () => {
     { posts: of(_posts), errors: [], currentPost: _posts[0] }
   );
 
-  beforeEach(() => {
-    const loginService = jasmine.createSpyObj('LoginService', [], {
-      state: loginState,
-    });
+  const loginService = jasmine.createSpyObj('LoginService', [], {
+    state: loginState,
+  });
 
+  beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [PostsComponent, CardComponent, ModalStubComponent],
       providers: [
@@ -90,6 +90,10 @@ describe('PostsComponent', () => {
     component = fixture.componentInstance;
     component.posts = _posts;
     component.edit = false;
+    loginState.success = false;
+    (
+      Object.getOwnPropertyDescriptor(loginService, 'state')!.get as jasmine.Spy
+    ).and.returnValue(loginState);
     fixture.detectChanges();
   });
 
@@ -121,6 +125,21 @@ describe('PostsComponent', () => {
       Object.getOwnPropertyDescriptor(postsService, 'currentPost')?.set
     ).toHaveBeenCalledWith(_posts[postIndex]);
     expect(TestBed.inject(Router).url).toEqual('/post');
+  });
+
+  it('should render two Like buttons if user is logged in', () => {
+    loginState.success = true;
+    (
+      Object.getOwnPropertyDescriptor(loginService, 'state')!.get as jasmine.Spy
+    ).and.returnValue(loginState);
+    fixture.detectChanges();
+    const btnElements = fixture.nativeElement.querySelectorAll('button');
+    expect(btnElements.length).toBe(4);
+    const likeBtnElements = [];
+    btnElements.forEach((btn: HTMLButtonElement) => {
+      if (btn.textContent!.indexOf('Like') > -1) likeBtnElements.push(btn);
+    });
+    expect(likeBtnElements.length).toBe(2);
   });
 
   it('should have getPostCard function to get input object for PostCard component', () => {
