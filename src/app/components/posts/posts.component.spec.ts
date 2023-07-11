@@ -142,6 +142,25 @@ describe('PostsComponent', () => {
     expect(likeBtnElements.length).toBe(2);
   });
 
+  it('should call toggleLike with the right post and user when Like button clicked', () => {
+    loginState.success = true;
+    (
+      Object.getOwnPropertyDescriptor(loginService, 'state')!.get as jasmine.Spy
+    ).and.returnValue(loginState);
+    fixture.detectChanges();
+    const postIndex = 0;
+    const btnElements = fixture.nativeElement.querySelectorAll('button');
+    const likeBtnElements: HTMLButtonElement[] = [];
+    btnElements.forEach((btn: HTMLButtonElement) => {
+      if (btn.textContent!.indexOf('Like') > -1) likeBtnElements.push(btn);
+    });
+    likeBtnElements[postIndex].click();
+    expect(postsService.toggleLike).toHaveBeenCalledWith(
+      _posts[postIndex],
+      testUser
+    );
+  });
+
   it('should have getPostCard function to get input object for PostCard component', () => {
     const post = _posts[0];
     const postCardInput = {
