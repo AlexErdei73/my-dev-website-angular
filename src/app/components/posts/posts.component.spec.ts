@@ -161,6 +161,26 @@ describe('PostsComponent', () => {
     );
   });
 
+  it('should render two Publish/Hide buttons if user is logged in and edits', () => {
+    loginState.success = true;
+    (
+      Object.getOwnPropertyDescriptor(loginService, 'state')!.get as jasmine.Spy
+    ).and.returnValue(loginState);
+    component.edit = true;
+    fixture.detectChanges();
+    const btnElements = fixture.nativeElement.querySelectorAll('button');
+    expect(btnElements.length).toBe(6);
+    const publishBtnElements = [];
+    btnElements.forEach((btn: HTMLButtonElement) => {
+      if (
+        btn.textContent!.indexOf('Publish') > -1 ||
+        btn.textContent!.indexOf('Hide') > -1
+      )
+        publishBtnElements.push(btn);
+    });
+    expect(publishBtnElements.length).toBe(2);
+  });
+
   it('should have getPostCard function to get input object for PostCard component', () => {
     const post = _posts[0];
     const postCardInput = {
