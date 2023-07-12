@@ -54,7 +54,7 @@ loginState = {
   success: false,
   password: '',
   user: testUser,
-  token: '',
+  token: 'test token',
   msg: '',
 };
 
@@ -179,6 +179,30 @@ describe('PostsComponent', () => {
         publishBtnElements.push(btn);
     });
     expect(publishBtnElements.length).toBe(2);
+  });
+
+  it('should call togglePublish with the right post when edits and Publish/Hide button clicked', () => {
+    loginState.success = true;
+    (
+      Object.getOwnPropertyDescriptor(loginService, 'state')!.get as jasmine.Spy
+    ).and.returnValue(loginState);
+    component.edit = true;
+    fixture.detectChanges();
+    const postIndex = 0;
+    const btnElements = fixture.nativeElement.querySelectorAll('button');
+    const publishBtnElements: HTMLButtonElement[] = [];
+    btnElements.forEach((btn: HTMLButtonElement) => {
+      if (
+        btn.textContent!.indexOf('Publish') > -1 ||
+        btn.textContent!.indexOf('Hide') > -1
+      )
+        publishBtnElements.push(btn);
+    });
+    publishBtnElements[postIndex].click();
+    expect(postsService.togglePublish).toHaveBeenCalledWith(
+      _posts[postIndex],
+      loginService.state.token
+    );
   });
 
   it('should have getPostCard function to get input object for PostCard component', () => {
