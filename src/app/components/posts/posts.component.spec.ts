@@ -221,6 +221,29 @@ describe('PostsComponent', () => {
     expect(deleteBtnElements.length).toBe(2);
   });
 
+  it('should open modal with when edits and Delete button clicked', () => {
+    loginState.success = true;
+    (
+      Object.getOwnPropertyDescriptor(loginService, 'state')!.get as jasmine.Spy
+    ).and.returnValue(loginState);
+    component.edit = true;
+    fixture.detectChanges();
+    const postIndex = 0;
+    const btnElements = fixture.nativeElement.querySelectorAll('button');
+    const deleteBtnElements: HTMLButtonElement[] = [];
+    btnElements.forEach((btn: HTMLButtonElement) => {
+      if (btn.textContent!.indexOf('Delete') > -1) deleteBtnElements.push(btn);
+    });
+    deleteBtnElements[postIndex].click();
+    expect(component.showModal).toBe(true);
+    expect(
+      Object.getOwnPropertyDescriptor(postsService, 'currentPost')!.set
+    ).toHaveBeenCalledWith(_posts[postIndex]);
+    expect(
+      Object.getOwnPropertyDescriptor(postsService, 'errors')!.set
+    ).toHaveBeenCalledWith([]);
+  });
+
   it('should have getPostCard function to get input object for PostCard component', () => {
     const post = _posts[0];
     const postCardInput = {
