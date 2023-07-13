@@ -9,7 +9,7 @@ import { User } from 'src/app/model/user';
 import { Variant } from '../card/card';
 import { Login } from 'src/app/model/login';
 import { of } from 'rxjs';
-import { Component, NO_ERRORS_SCHEMA } from '@angular/core';
+import { Component, Input, NO_ERRORS_SCHEMA } from '@angular/core';
 let testUser: User;
 let _posts: Post[];
 let loginState: Login;
@@ -58,8 +58,13 @@ loginState = {
   msg: '',
 };
 
-@Component({ selector: 'app-modal', template: '' })
-class ModalStubComponent {}
+@Component({
+  selector: 'app-modal',
+  template: '<div *ngIf="show"><ng-content></ng-content></div>',
+})
+class ModalStubComponent {
+  @Input() show!: boolean;
+}
 
 describe('PostsComponent', () => {
   let component: PostsComponent;
@@ -242,6 +247,44 @@ describe('PostsComponent', () => {
     expect(
       Object.getOwnPropertyDescriptor(postsService, 'errors')!.set
     ).toHaveBeenCalledWith([]);
+  });
+
+  it('should call deletePost when modal is open and Delete btn clicked', () => {
+    loginState.success = true;
+    (
+      Object.getOwnPropertyDescriptor(loginService, 'state')!.get as jasmine.Spy
+    ).and.returnValue(loginState);
+    component.edit = true;
+    component.showModal = true;
+    fixture.detectChanges();
+    const btnElements = fixture.nativeElement.querySelectorAll('button');
+    const deleteBtnElements: HTMLButtonElement[] = [];
+    btnElements.forEach((btn: HTMLButtonElement) => {
+      if (btn.textContent!.indexOf('Delete') > -1) deleteBtnElements.push(btn);
+    });
+    expect(deleteBtnElements.length).toBe(3);
+    deleteBtnElements[2].click();
+    expect(postsService.deletePost).toHaveBeenCalledWith(
+      loginService.state.token
+    );
+  });
+
+  it('should close open modal when Cancel btn clicked', () => {
+    loginState.success = true;
+    (
+      Object.getOwnPropertyDescriptor(loginService, 'state')!.get as jasmine.Spy
+    ).and.returnValue(loginState);
+    component.edit = true;
+    component.showModal = true;
+    fixture.detectChanges();
+    const btnElements = fixture.nativeElement.querySelectorAll('button');
+    const cancelBtnElements: HTMLButtonElement[] = [];
+    btnElements.forEach((btn: HTMLButtonElement) => {
+      if (btn.textContent!.indexOf('Cancel') > -1) cancelBtnElements.push(btn);
+    });
+    expect(cancelBtnElements.length).toBe(1);
+    cancelBtnElements[0].click();
+    expect(component.showModal).toBe(false);
   });
 
   it('should have getPostCard function to get input object for PostCard component', () => {
