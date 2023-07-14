@@ -12,11 +12,13 @@ import { PostsService } from 'src/app/services/posts.service';
 })
 export class LoginComponent implements OnInit {
   posts: Post[] = [];
+  userPosts: Post[] = [];
   loginState!: Login;
   login = {
     name: '',
     password: '',
   };
+  showNewPostForm = false;
   constructor(
     private loginService: LoginService,
     private postsService: PostsService
@@ -25,7 +27,10 @@ export class LoginComponent implements OnInit {
     this.loginState = this.loginService.state;
     this.login.name = this.loginState.user.username;
     this.login.password = this.loginState.password;
-    this.postsService.posts.subscribe((posts) => (this.posts = posts));
+    this.postsService.posts.subscribe((posts) => {
+      this.posts = posts;
+      this.userPosts = this.getUserPosts();
+    });
   }
 
   private setLoginMsg(msg: string) {
@@ -50,16 +55,27 @@ export class LoginComponent implements OnInit {
     }
   }
 
-  userPosts() {
+  private getUserPosts() {
     return this.posts.filter(
       (post) => (post.author as User)._id === this.loginState.user._id
     );
   }
 
   onDeletePost(post: Post) {
-    console.log(post);
     const index = this.posts.findIndex((element) => post._id === element._id);
     this.posts.splice(index, 1);
+    this.userPosts = this.getUserPosts();
+  }
+
+  onClickNewPost() {
+    this.showNewPostForm = true;
+  }
+
+  onCreatePost(post: Post) {
+    post.author = this.loginService.state.user;
+    this.posts.push(post);
+    this.userPosts = this.getUserPosts();
+    this.showNewPostForm = false;
   }
 
   onLogout() {

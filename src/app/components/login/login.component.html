@@ -29,18 +29,26 @@
   <button type="submit" class="login__button">Login</button>
   <app-error-msg *ngIf="loginState.msg" [msg]="loginState.msg"></app-error-msg>
 </form>
-<div *ngIf="loginState.success" class="logout">
+
+<div *ngIf="loginState.success && !showNewPostForm" class="logout">
   <h1 class="logout__title">Welcome {{ loginState.user.username }}!</h1>
   <app-posts
-    [posts]="userPosts()"
+    [posts]="userPosts"
     (deletePost)="onDeletePost($event)"
     [edit]="true"
   ></app-posts>
 
-  <a routerLink="/new-post" class="logout__button--link"> New Post </a>
+  <button (click)="onClickNewPost()" class="logout__button--link">
+    New Post
+  </button>
 
   <p>You are currently logged in.</p>
   <button type="button" (click)="onLogout()" class="logout__button">
     Logout
   </button>
 </div>
+
+<app-new-post
+  *ngIf="showNewPostForm"
+  (createPost)="onCreatePost($event)"
+></app-new-post>

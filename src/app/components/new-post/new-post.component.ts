@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { LoginService } from 'src/app/services/login.service';
 import { PostsService } from 'src/app/services/posts.service';
-import { Router } from '@angular/router';
 import { ErrorHandlingService } from 'src/app/services/error-handling.service';
+import { Post } from 'src/app/model/post';
 
 interface NewPost {
   title: string;
@@ -17,12 +17,12 @@ interface NewPost {
 })
 export class NewPostComponent implements OnInit {
   newPost!: NewPost;
+  @Output() private createPost: EventEmitter<Post> = new EventEmitter<Post>();
 
   constructor(
     private loginService: LoginService,
     private postsService: PostsService,
-    private errorHandlingService: ErrorHandlingService,
-    private router: Router
+    private errorHandlingService: ErrorHandlingService
   ) {}
   ngOnInit() {
     this.newPost = {
@@ -40,10 +40,8 @@ export class NewPostComponent implements OnInit {
         .subscribe({
           next: (res) => {
             this.postsService.addPost(res.post);
-            this.postsService.posts.subscribe((res) => {
-              this.postsService.success = true;
-              this.router.navigate(['/login']);
-            });
+            this.postsService.success = true;
+            this.createPost.emit(res.post);
           },
           error: (err) => {
             this.postsService.errors =
