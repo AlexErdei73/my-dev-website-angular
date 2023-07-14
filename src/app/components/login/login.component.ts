@@ -56,6 +56,12 @@ export class LoginComponent implements OnInit {
     );
   }
 
+  onDeletePost(post: Post) {
+    console.log(post);
+    const index = this.posts.findIndex((element) => post._id === element._id);
+    this.posts.splice(index, 1);
+  }
+
   onLogout() {
     this.loginService.logout();
     this.login.password = '';

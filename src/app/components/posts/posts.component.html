@@ -7,16 +7,32 @@
         </h2>
       </div>
       <div class="card-body__button-container">
-        <button type="button" class="card-body__button" (click)="onClickView(post)">
+        <button
+          type="button"
+          class="card-body__button"
+          (click)="onClickView(post)"
+        >
           View
         </button>
-        <button *ngIf="!edit && loginService.state.success" class="card-body__button" (click)="onClickLike(post)">
-          {{isPostLiked(post) ? "Unlike" : "Like"}}
+        <button
+          *ngIf="!edit && loginService.state.success"
+          class="card-body__button"
+          (click)="onClickLike(post)"
+        >
+          {{ isPostLiked(post) ? "Unlike" : "Like" }}
         </button>
-        <button *ngIf="edit" class="card-body__button" (click)="onClickPublish(post)">
-          {{post.published ? "Hide" : "Publish"}}
+        <button
+          *ngIf="edit"
+          class="card-body__button"
+          (click)="onClickPublish(post)"
+        >
+          {{ post.published ? "Hide" : "Publish" }}
         </button>
-        <button *ngIf="edit || user.isAdmin" class="card-body__button--delete" (click)="onClickDelete(post)">
+        <button
+          *ngIf="edit || user.isAdmin"
+          class="card-body__button--delete"
+          (click)="onClickDelete(post)"
+        >
           Delete
         </button>
       </div>
@@ -24,25 +40,45 @@
   </app-card>
 </div>
 
-<app-modal [show]="showModal" [card]="{
-  variant: danger, 
-  headerTextLeft: 'Danger!', 
-  headerTextRight: '', 
-  footerTextLeft: 'Permanent data loss', 
-  footerTextRight: ''
-}">
+<app-modal
+  [show]="showModal"
+  [card]="{
+    variant: danger,
+    headerTextLeft: 'Danger!',
+    headerTextRight: '',
+    footerTextLeft: 'Permanent data loss',
+    footerTextRight: ''
+  }"
+>
   <div class="modal-body">
-    <p *ngIf="postsService.errors.length === 0">You are going to delete the post permanently. Are you sure?</p>
-    <app-error-msg *ngIf="postsService.errors.length !== 0" [msg]="postsService.errors[0].msg" />
+    <p *ngIf="postsService.errors.length === 0">
+      You are going to delete the post permanently. Are you sure?
+    </p>
+    <app-error-msg
+      *ngIf="postsService.errors.length !== 0"
+      [msg]="postsService.errors[0].msg"
+    />
     <div class="modal-body__button-container">
-      <button type="button" (click)="onClickModalDelete()" class="modal-body__button--delete">
+      <button
+        type="button"
+        (click)="onDeletePost()"
+        class="modal-body__button--delete"
+      >
         Delete
       </button>
-      <button type="button" (click)="onClickModalCancel()" class="modal-body__button">
+      <button
+        type="button"
+        (click)="onClickModalCancel()"
+        class="modal-body__button"
+      >
         Cancel
       </button>
     </div>
   </div>
 </app-modal>
 
-<app-error-dlg *ngIf="postsService.errors.length > 0" [error]="postsService.errors[0]" [show]="postsService.showErrorDlg"></app-error-dlg>
+<app-error-dlg
+  *ngIf="postsService.errors.length > 0"
+  [error]="postsService.errors[0]"
+  [show]="postsService.showErrorDlg"
+></app-error-dlg>

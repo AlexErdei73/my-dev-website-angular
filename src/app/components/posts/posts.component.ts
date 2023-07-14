@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { Router } from '@angular/router';
 import { Post } from 'src/app/model/post';
 import { User } from 'src/app/model/user';
@@ -14,6 +14,7 @@ import { ErrorHandlingService } from 'src/app/services/error-handling.service';
 })
 export class PostsComponent implements OnInit {
   @Input() posts!: Post[];
+  @Output() private deletePost: EventEmitter<Post> = new EventEmitter<Post>();
   @Input() edit!: boolean;
   @Input() admin = false;
   @Input() showModal = false;
@@ -68,16 +69,14 @@ export class PostsComponent implements OnInit {
     this.postsService.togglePublish(post, this.loginService.state.token);
   }
 
-  onClickModalDelete() {
+  onDeletePost() {
     this.postsService.deletePost(this.loginService.state.token).subscribe({
       next: (res) => {
         this.postsService.removePost(res.post);
-        this.postsService.posts.subscribe((posts) => {
-          this.postsService.success = true;
-          this.posts = posts;
-          this.postsService.currentPost = posts[0];
-          this.onClickModalCancel();
-        });
+        this.postsService.success = true;
+        this.postsService.currentPost = this.posts[0];
+        this.deletePost.emit(res.post);
+        this.onClickModalCancel();
       },
       error: (err) => {
         this.postsService.errors = this.errorHandlingService.handleErrors(err);
