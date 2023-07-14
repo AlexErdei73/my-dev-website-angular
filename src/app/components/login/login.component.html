@@ -1,22 +1,43 @@
-<form *ngIf="!loginState.success" class="login" (ngSubmit)="onSubmit(loginForm)" #loginForm="ngForm">
+<form
+  *ngIf="!loginState.success"
+  class="login"
+  (ngSubmit)="onSubmit(loginForm)"
+  #loginForm="ngForm"
+>
   <h1 class="login__title">Login</h1>
 
   <label htmlFor="username">Username*</label>
-  <input type="text" id="username" class="login__username" [(ngModel)]="login.name" required #username="ngModel" name="name" />
+  <input
+    type="text"
+    id="username"
+    class="login__username"
+    [(ngModel)]="login.name"
+    required
+    #username="ngModel"
+    name="name"
+  />
   <label htmlFor="password">Password*</label>
-  <input type="text" id="password" class="login__password" [(ngModel)]="login.password" required #password="ngModel" name="password" />
-  <button type="submit" class="login__button">
-    Login
-  </button>
+  <input
+    type="text"
+    id="password"
+    class="login__password"
+    [(ngModel)]="login.password"
+    required
+    #password="ngModel"
+    name="password"
+  />
+  <button type="submit" class="login__button">Login</button>
   <app-error-msg *ngIf="loginState.msg" [msg]="loginState.msg"></app-error-msg>
 </form>
 <div *ngIf="loginState.success" class="logout">
-  <h1 class="logout__title">Welcome {{loginState.user.username}}!</h1>
-  <app-posts [posts]="userPosts()" [edit]="true"></app-posts>
+  <h1 class="logout__title">Welcome {{ loginState.user.username }}!</h1>
+  <app-posts
+    [posts]="userPosts()"
+    (deletePost)="onDeletePost($event)"
+    [edit]="true"
+  ></app-posts>
 
-  <a routerLink="/new-post" class="logout__button--link">
-    New Post
-  </a>
+  <a routerLink="/new-post" class="logout__button--link"> New Post </a>
 
   <p>You are currently logged in.</p>
   <button type="button" (click)="onLogout()" class="logout__button">

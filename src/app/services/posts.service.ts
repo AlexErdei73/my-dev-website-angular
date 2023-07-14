@@ -11,6 +11,7 @@ import { ErrorHandlingService } from './error-handling.service';
 })
 export class PostsService {
   private _posts!: Observable<Post[]>;
+  private _postsArray!: Post[];
   private _currentPost!: Post;
   private _edit = false;
   private _errors: { msg: string }[] = [];
@@ -52,6 +53,7 @@ export class PostsService {
         const aboutPost = posts.find((post) => post._id === this._ABOUT_POST);
         if (aboutPost) this._aboutPost = aboutPost;
         if (posts.length > 0) this._currentPost = posts[0];
+        this._postsArray = posts;
       },
       error: (err) => {
         this.errorHandling.handleErrors(err, this.handleErrorCallBack);
@@ -235,20 +237,16 @@ export class PostsService {
   }
 
   addPost(post: Post) {
-    this._posts.subscribe((posts) => {
-      const newPosts = posts;
-      newPosts.push(post);
-      this._posts = of(newPosts);
-    });
+    this._postsArray.push(post);
+    this._posts = of(this._postsArray);
   }
 
   removePost(post: Post) {
-    this._posts.subscribe((posts) => {
-      const newPosts = posts;
-      const index = newPosts.findIndex((element) => element._id === post._id);
-      newPosts.splice(index, 1);
-      this._posts = of(newPosts);
-    });
+    const index = this._postsArray.findIndex(
+      (element) => element._id === post._id
+    );
+    this._postsArray.splice(index, 1);
+    this._posts = of(this._postsArray);
   }
 
   closeErrorDlg(): void {
