@@ -17,7 +17,7 @@ export class PostsService {
   private _errors: { msg: string }[] = [];
   private _success = false;
   private _aboutPost!: Post;
-  private _ABOUT_POST = '644d35f7efc2a3029df288cb';
+  private _ABOUT_POST = '64b3b9fc11a583b26b48b476';
   private _EMPTY_AUTHOR: User = {
     _id: '',
     username: '...Loading',
