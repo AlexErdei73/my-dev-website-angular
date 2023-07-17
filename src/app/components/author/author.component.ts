@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { User } from 'src/app/model/user';
 import { LoginService } from 'src/app/services/login.service';
-import { PostsService } from 'src/app/services/posts.service';
 
 @Component({
   selector: 'app-author',
@@ -9,13 +8,10 @@ import { PostsService } from 'src/app/services/posts.service';
   styleUrls: ['./author.component.less'],
 })
 export class AuthorComponent implements OnInit {
-  author!: User;
+  @Input() author!: User;
   username = this.loginService.state.user.username;
-  constructor(
-    private postsService: PostsService,
-    private loginService: LoginService
-  ) {}
+  constructor(private loginService: LoginService) {}
   ngOnInit(): void {
-    this.author = this.postsService.currentPost!.author as User;
+    this.author = this.author as User;
   }
 }
