@@ -74,7 +74,7 @@ export class PostsComponent implements OnInit {
       next: (res) => {
         this.postsService.removePost(res.post);
         this.postsService.success = true;
-        this.postsService.currentPost = this.posts[0];
+        this.postsService.currentPost = this.postsService.aboutPost;
         this.deletePost.emit(res.post);
         this.onClickModalCancel();
       },

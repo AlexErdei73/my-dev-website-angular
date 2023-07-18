@@ -51,8 +51,10 @@ export class PostsService {
     this._posts.subscribe({
       next: (posts) => {
         const aboutPost = posts.find((post) => post._id === this._ABOUT_POST);
-        if (aboutPost) this._aboutPost = aboutPost;
-        if (posts.length > 0) this._currentPost = posts[0];
+        if (aboutPost) {
+          this._aboutPost = aboutPost;
+          this._currentPost = aboutPost;
+        }
         this._postsArray = posts;
       },
       error: (err) => {
