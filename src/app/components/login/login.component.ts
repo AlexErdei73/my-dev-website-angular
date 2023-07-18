@@ -39,6 +39,7 @@ export class LoginComponent implements OnInit {
 
   setLoginState = (loginState: Login) => {
     this.loginState = loginState;
+    this.userPosts = this.getUserPosts();
   };
 
   onSubmit(loginForm: { valid: any }) {
