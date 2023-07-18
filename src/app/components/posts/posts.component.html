@@ -29,7 +29,7 @@
           {{ post.published ? "Hide" : "Publish" }}
         </button>
         <button
-          *ngIf="edit || user.isAdmin"
+          *ngIf="edit || (user.isAdmin && loginService.state.success)"
           class="card-body__button--delete"
           (click)="onClickDelete(post)"
         >
