@@ -55,7 +55,7 @@ describe('PostsService', () => {
       updatedAt: '30/04/2023',
     };
     testAboutPost = {
-      _id: '644d35f7efc2a3029df288cb',
+      _id: '64b3b9fc11a583b26b48b476',
       author: testUser,
       title: 'About',
       content: [],
@@ -131,6 +131,7 @@ describe('PostsService', () => {
   it('should have aboutPost as testAboutPost', () => {
     service.posts.subscribe((posts) => {
       expect(service.aboutPost).toEqual(testAboutPost);
+      console.log(service.aboutPost);
     });
 
     const requests = httpTestingController.match(`${baseUrl}/posts`);
@@ -139,6 +140,7 @@ describe('PostsService', () => {
     expect(requests[1].request.method).toBe('GET');
 
     requests[0].flush({ success: true, posts: testPosts, errors: [] });
+    testAboutPost.title = 'About 2';
     requests[1].flush({ success: true, posts: testPosts, errors: [] });
   });
 
