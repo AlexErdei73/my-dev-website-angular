@@ -114,9 +114,9 @@ describe('PostsService', () => {
     requests[1].flush({ success: true, posts: testPosts, errors: [] });
   });
 
-  it('should have currentPost as testPost', () => {
+  it('should have currentPost as testAboutPost', () => {
     service.posts.subscribe((posts) => {
-      expect(service.currentPost).toEqual(testPost);
+      expect(service.currentPost).toEqual(testAboutPost);
     });
 
     const requests = httpTestingController.match(`${baseUrl}/posts`);
