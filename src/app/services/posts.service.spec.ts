@@ -204,7 +204,10 @@ describe('PostsService', () => {
   it('should remove post', () => {
     const newPosts = [testAboutPost];
 
-    service.removePost(testPost);
+    service.posts.subscribe((posts) => {
+      service.removePost(testPost);
+    });
+
     service.posts.subscribe((posts) => {
       expect(posts).toEqual(newPosts);
     });
