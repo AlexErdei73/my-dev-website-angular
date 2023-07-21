@@ -131,7 +131,6 @@ describe('PostsService', () => {
   it('should have aboutPost as testAboutPost', () => {
     service.posts.subscribe((posts) => {
       expect(service.aboutPost).toEqual(testAboutPost);
-      console.log(service.aboutPost);
     });
 
     const requests = httpTestingController.match(`${baseUrl}/posts`);
@@ -140,7 +139,6 @@ describe('PostsService', () => {
     expect(requests[1].request.method).toBe('GET');
 
     requests[0].flush({ success: true, posts: testPosts, errors: [] });
-    testAboutPost.title = 'About 2';
     requests[1].flush({ success: true, posts: testPosts, errors: [] });
   });
 
@@ -162,10 +160,13 @@ describe('PostsService', () => {
   });
 
   it('should add new post', () => {
-    const newPosts = testPosts;
+    service.posts.subscribe((posts) => {
+      service.addPost(newPost);
+    });
+
+    const newPosts = [...testPosts];
     newPosts.push(newPost);
 
-    service.addPost(newPost);
     service.posts.subscribe((posts) => {
       expect(posts).toEqual(newPosts);
     });
