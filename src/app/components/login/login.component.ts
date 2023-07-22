@@ -63,8 +63,11 @@ export class LoginComponent implements OnInit {
   }
 
   onDeletePost(post: Post) {
+    console.log(post._id);
     const index = this.posts.findIndex((element) => post._id === element._id);
-    this.posts.splice(index, 1);
+    console.log(this.posts.map((post) => post._id));
+    console.log(this.posts.length);
+    if (index >= 0) this.posts.splice(index, 1);
     this.userPosts = this.getUserPosts();
   }
 
