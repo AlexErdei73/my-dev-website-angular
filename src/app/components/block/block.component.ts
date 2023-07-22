@@ -105,7 +105,6 @@ export class BlockComponent {
   }
 
   onSubmitBlock(block: Block) {
-    console.log('Block is submitted! ', block);
     if (block._id === '') this.save(block);
     else this.update(block);
   }
