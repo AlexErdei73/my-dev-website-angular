@@ -39,6 +39,7 @@ export class NewPostComponent implements OnInit {
         .postPost(this.newPost, this.loginService.state.token)
         .subscribe({
           next: (res) => {
+            res.post.author = this.loginService.state.user;
             this.postsService.addPost(res.post);
             this.postsService.success = true;
             this.createPost.emit(res.post);

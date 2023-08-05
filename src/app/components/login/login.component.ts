@@ -27,14 +27,18 @@ export class LoginComponent implements OnInit {
     this.loginState = this.loginService.state;
     this.login.name = this.loginState.user.username;
     this.login.password = this.loginState.password;
-    this.postsService.posts.subscribe((posts) => {
-      this.posts = posts;
-      this.userPosts = this.getUserPosts();
-    });
+    this.subscribePosts();
   }
 
   private setLoginMsg(msg: string) {
     this.loginState.msg = msg;
+  }
+
+  private subscribePosts() {
+    this.postsService.posts.subscribe((posts) => {
+      this.posts = posts;
+      this.userPosts = this.getUserPosts();
+    });
   }
 
   setLoginState = (loginState: Login) => {
@@ -63,9 +67,7 @@ export class LoginComponent implements OnInit {
   }
 
   onDeletePost(post: Post) {
-    const index = this.posts.findIndex((element) => post._id === element._id);
-    if (index >= 0) this.posts.splice(index, 1);
-    this.userPosts = this.getUserPosts();
+    this.subscribePosts();
   }
 
   onClickNewPost() {
@@ -73,9 +75,7 @@ export class LoginComponent implements OnInit {
   }
 
   onCreatePost(post: Post) {
-    post.author = this.loginService.state.user;
-    this.posts.push(post);
-    this.userPosts = this.getUserPosts();
+    this.subscribePosts();
     this.showNewPostForm = false;
   }
 
