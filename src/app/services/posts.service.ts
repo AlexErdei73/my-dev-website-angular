@@ -10,6 +10,7 @@ import { ErrorHandlingService } from './error-handling.service';
   providedIn: 'root',
 })
 export class PostsService {
+  private _BASE_URL = 'https://blog-api.alexerdei.co.uk';
   private _posts!: Observable<Post[]>;
   private _postsArray!: Post[];
   private _currentPost!: Post;
@@ -66,7 +67,7 @@ export class PostsService {
   fetchPosts() {
     this._posts = this.http
       .get<{ success: boolean; posts: Post[]; errors: [] }>(
-        'https://radiant-crag-39178.herokuapp.com/posts'
+        `${this._BASE_URL}/posts`
       )
       .pipe(map((res) => res.posts));
   }
@@ -125,7 +126,7 @@ export class PostsService {
   toggleLike(post: Post, user: User) {
     this.http
       .put<{ success: boolean; posts: Post[]; errors: [{ msg: string }] }>(
-        `https://radiant-crag-39178.herokuapp.com/posts/${post._id}/likes`,
+        `${this._BASE_URL}/posts/${post._id}/likes`,
         { user: user._id }
       )
       .subscribe({
@@ -143,7 +144,7 @@ export class PostsService {
   togglePublish(post: Post, token: string) {
     this.http
       .put<{ success: boolean; post: Post; errors: [{ msg: string }] }>(
-        `https://radiant-crag-39178.herokuapp.com/posts/${post._id}`,
+        `${this._BASE_URL}/posts/${post._id}`,
         {
           ...post,
           published: !post.published,
@@ -164,12 +165,9 @@ export class PostsService {
       success: boolean;
       post: Post;
       errors: { msg: string }[];
-    }>(
-      `https://radiant-crag-39178.herokuapp.com/posts/${
-        (this._currentPost as any as Post)._id
-      }`,
-      { headers: { ['Authorization']: token } }
-    );
+    }>(`${this._BASE_URL}/posts/${(this._currentPost as any as Post)._id}`, {
+      headers: { ['Authorization']: token },
+    });
   }
 
   postPost(post: any, token: string) {
@@ -178,7 +176,7 @@ export class PostsService {
       success: boolean;
       post: Post;
       errors: { msg: string }[];
-    }>('https://radiant-crag-39178.herokuapp.com/posts', post, {
+    }>(`${this._BASE_URL}/posts`, post, {
       headers: { ['Authorization']: token },
     });
   }
@@ -189,7 +187,7 @@ export class PostsService {
       success: boolean;
       post: Post;
       errors: { msg: string }[];
-    }>(`https://radiant-crag-39178.herokuapp.com/posts/${post._id}`, post, {
+    }>(`${this._BASE_URL}/posts/${post._id}`, post, {
       headers: { ['Authorization']: token },
     });
   }
@@ -200,12 +198,9 @@ export class PostsService {
       success: boolean;
       block: Block;
       errors: { msg: string }[];
-    }>(
-      `https://radiant-crag-39178.herokuapp.com/posts/${block.post}/blocks/${block._id}`,
-      {
-        headers: { ['Authorization']: token },
-      }
-    );
+    }>(`${this._BASE_URL}/posts/${block.post}/blocks/${block._id}`, {
+      headers: { ['Authorization']: token },
+    });
   }
 
   saveBlock(block: Block, token: string) {
@@ -214,13 +209,9 @@ export class PostsService {
       success: boolean;
       block: Block;
       errors: { msg: string }[];
-    }>(
-      `https://radiant-crag-39178.herokuapp.com/posts/${block.post}/blocks`,
-      block,
-      {
-        headers: { ['Authorization']: token },
-      }
-    );
+    }>(`${this._BASE_URL}/posts/${block.post}/blocks`, block, {
+      headers: { ['Authorization']: token },
+    });
   }
 
   updateBlock(block: Block, token: string) {
@@ -229,13 +220,9 @@ export class PostsService {
       success: boolean;
       block: Block;
       errors: { msg: string }[];
-    }>(
-      `https://radiant-crag-39178.herokuapp.com/posts/${block.post}/blocks/${block._id}`,
-      block,
-      {
-        headers: { ['Authorization']: token },
-      }
-    );
+    }>(`${this._BASE_URL}/posts/${block.post}/blocks/${block._id}`, block, {
+      headers: { ['Authorization']: token },
+    });
   }
 
   addPost(post: Post) {

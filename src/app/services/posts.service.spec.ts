@@ -22,7 +22,7 @@ describe('PostsService', () => {
   let newPost: Post;
   let testPosts: Post[];
   let testBlock: Block;
-  let baseUrl = 'https://radiant-crag-39178.herokuapp.com';
+  let baseUrl = 'https://blog-api.alexerdei.co.uk';
 
   beforeEach(() => {
     TestBed.configureTestingModule({

@@ -15,6 +15,7 @@ interface LoginResponse {
   providedIn: 'root',
 })
 export class LoginService {
+  private _BASE_URL = 'https://blog-api.alexerdei.co.uk';
   private loginState!: Login;
   private setLoginState: any;
   constructor(
@@ -61,13 +62,10 @@ export class LoginService {
     const uname = this.loginState.user.username;
     const pwd = this.loginState.password;
     this.http
-      .post<LoginResponse>(
-        'https://radiant-crag-39178.herokuapp.com/users/login',
-        {
-          username: uname,
-          password: pwd,
-        }
-      )
+      .post<LoginResponse>(`${this._BASE_URL}/users/login`, {
+        username: uname,
+        password: pwd,
+      })
       .subscribe({
         next: (res) => {
           if (res.success) {
@@ -100,14 +98,14 @@ export class LoginService {
 
   createUser(user: User) {
     return this.http.post<{ success: boolean; errors: { msg: string }[] }>(
-      'https://radiant-crag-39178.herokuapp.com/users/login',
+      `${this._BASE_URL}/users/login`,
       user
     );
   }
 
   updateUser(user: User, token: string) {
     return this.http.put<{ success: boolean; errors: { msg: string }[] }>(
-      `https://radiant-crag-39178.herokuapp.com/users/${user._id}`,
+      `${this._BASE_URL}/users/${user._id}`,
       user,
       {
         headers: { ['Authorization']: token },
