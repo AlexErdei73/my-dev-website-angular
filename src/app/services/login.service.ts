@@ -98,7 +98,7 @@ export class LoginService {
 
   createUser(user: User) {
     return this.http.post<{ success: boolean; errors: { msg: string }[] }>(
-      `${this._BASE_URL}/users/login`,
+      `${this._BASE_URL}/users`,
       user
     );
   }

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { Login } from 'src/app/model/login';
 import { User } from 'src/app/model/user';
 import { ErrorHandlingService } from 'src/app/services/error-handling.service';
 import { LoginService } from 'src/app/services/login.service';
@@ -36,7 +37,15 @@ export class SignupComponent implements OnInit {
       if (!this.loginSuccess)
         this.loginService.createUser(this.signup).subscribe({
           next: () => {
-            this.router.navigateByUrl('/login');
+            this.loginService.state = {
+              ...this.loginService.state,
+              user: this.signup,
+              password: this.signup.password!,
+            };
+            this.loginService.login((loginState: Login) => {
+              this.loginService.state = loginState;
+              this.router.navigateByUrl('/login');
+            });
           },
           error: (err) =>
             this.errors.push(this.errorHandling.handleErrors(err)[0]),
